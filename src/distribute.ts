@@ -1,6 +1,7 @@
 // publishing script
 import { config } from 'dotenv';
 import { Exec } from 'suf-node';
+import { callbackify } from 'util';
 config();
 
 (async () => {
@@ -25,7 +26,8 @@ async function Try(command: string) {
   try {
     await Exec(command);
     Finished(`Finished: ${command}`);
-  } catch {
+  } catch (e) {
+    console.log(e);
     Failed(`Failed: ${command}`);
   }
 }
