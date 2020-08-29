@@ -65,9 +65,8 @@ class SassCompletion implements CompletionItemProvider {
     let variables: CompletionItem[] = [];
 
     let completions: CompletionItem[] = [];
-
-    if (document.languageId === 'vue') {
-      block = Utility.isInVueStyleBlock(start, document);
+    if (document.languageId === 'vue' || document.languageId === 'svelte') {
+      block = Utility.isInVueOrSvelteStyleBlock(start, document);
     }
     if (
       !block &&

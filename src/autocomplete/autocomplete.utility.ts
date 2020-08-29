@@ -241,10 +241,10 @@ export class AutocompleteUtils {
     return res;
   }
   /** don't get confused by the return values. */
-  static isInVueStyleBlock(start: Position, document: TextDocument) {
+  static isInVueOrSvelteStyleBlock(start: Position, document: TextDocument) {
     for (let i = start.line; i > 0; i--) {
       const line = document.lineAt(i);
-      if (/^ *<[\w"'= ]*lang=['"]sass['"][\w"'= ]*>/.test(line.text)) {
+      if (/^ *<[\w"'= ]*(lang|type)=['"](text\/)?sass['"][\w"'= ]*>/.test(line.text)) {
         if (!(i === start.line)) {
           return false;
         }

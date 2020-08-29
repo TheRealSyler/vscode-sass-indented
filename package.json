@@ -16,7 +16,8 @@
   },
   "activationEvents": [
     "onLanguage:sass",
-    "onLanguage:vue"
+    "onLanguage:vue",
+    "onLanguage:svelte"
   ],
   "main": "./dist/extension",
   "categories": [
@@ -104,6 +105,26 @@
           ".sass.hover"
         ],
         "configuration": "./sass.configuration.json"
+      },
+      {
+        "id": "vue",
+        "aliases": [
+          "Vue",
+          "vue"
+        ],
+        "extensions": [
+          ".vue"
+        ]
+      },
+      {
+        "id": "svelte",
+        "aliases": [
+          "Svelte",
+          "svelte"
+        ],
+        "extensions": [
+          ".svelte"
+        ]
       }
     ],
     "grammars": [

@@ -84,6 +84,8 @@ export function activate(context: vscode.ExtensionContext) {
       { language: 'sass', scheme: 'untitled' },
       { language: 'vue', scheme: 'file' },
       { language: 'vue', scheme: 'untitled' },
+      { language: 'svelte', scheme: 'file' },
+      { language: 'svelte', scheme: 'untitled' },
     ],
     sassCompletion,
     '\\.',
