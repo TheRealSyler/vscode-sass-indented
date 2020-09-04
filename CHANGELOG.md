@@ -2,6 +2,8 @@
 
 | Version | Date       | Changelog                                                                      |
 | ------- | ---------- | ------------------------------------------------------------------------------ |
+| 1.8.11  | 4.9.2020   | update sass-formatter fix atInclude regex                                      |
+| 1.8.10  | 30.8.2020  | add svelte support                                                             |
 | 1.8.9   | 20.7.2020  | update grammar and sass-formatter fix block comment. (again)                   |
 | 1.8.8   | 19.7.2020  | update grammar and sass-formatter fix block comment.                           |
 | 1.8.7   | 27.6.2020  | update sass-formatter fix keyframe point issue.                                |
