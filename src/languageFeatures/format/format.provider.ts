@@ -7,7 +7,8 @@ import {
   Range,
   FormattingOptions,
   workspace,
-  Position
+  Position,
+  EndOfLine,
 } from 'vscode';
 
 import { SassFormatter } from 'sass-formatter';
@@ -34,9 +35,10 @@ class FormattingProvider implements DocumentFormattingEditProvider {
             debug: config.get('debug'),
             deleteEmptyRows: config.get('deleteEmptyRows'),
             deleteWhitespace: config.get('deleteWhitespace'),
-            setPropertySpace: config.get('setPropertySpace')
+            setPropertySpace: config.get('setPropertySpace'),
+            lineEnding: EndOfLine[document.eol] as 'LF' | 'CRLF',
           })
-        )
+        ),
       ];
     }
     return [];

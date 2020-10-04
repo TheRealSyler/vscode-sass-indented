@@ -2,6 +2,7 @@
 
 | Version | Date       | Changelog                                                                      |
 | ------- | ---------- | ------------------------------------------------------------------------------ |
+| 1.8.12  | 4.10.2020  | add CRLF comparability                                                         |
 | 1.8.11  | 4.9.2020   | update sass-formatter fix atInclude regex                                      |
 | 1.8.10  | 30.8.2020  | add svelte support                                                             |
 | 1.8.9   | 20.7.2020  | update grammar and sass-formatter fix block comment. (again)                   |
