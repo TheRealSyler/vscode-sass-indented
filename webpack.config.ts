@@ -6,7 +6,7 @@ const config: Configuration = {
   target: 'node',
   entry: {
     extension: './src/extension.ts',
-    server: 'sass-lsp-server',
+    server: './src/server.ts',
   },
   cache: true,
   output: {
