@@ -91,6 +91,7 @@ export const sassAt = sassAtArr.map((item) => {
   completionItem.insertText = new SnippetString(item.body);
   completionItem.detail = item.desc;
   completionItem.kind = CompletionItemKind.Function;
+  completionItem.sortText = "8";
 
   return completionItem;
 });

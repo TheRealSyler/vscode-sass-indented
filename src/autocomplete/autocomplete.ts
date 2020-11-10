@@ -141,6 +141,7 @@ class SassCompletion implements CompletionItemProvider {
             );
             completionItem.detail = element.item.detail;
             completionItem.kind = element.item.kind;
+            completionItem.sortText = "6";
             variables.push(completionItem);
           }
         });
@@ -176,6 +177,7 @@ class SassCompletion implements CompletionItemProvider {
         completionItem.insertText = Utility.mergeNamespace(element.item.insert, namespace);
         completionItem.documentation = new MarkdownString(element.item.detail);
         completionItem.kind = element.item.kind;
+        completionItem.sortText = "1";
         variables.push(completionItem);
       }
     });

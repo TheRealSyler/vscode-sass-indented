@@ -309,5 +309,6 @@ export default sassSchema.map(item => {
   completionItem.insertText = new SnippetString(item.body);
   completionItem.detail = item.desc;
   completionItem.kind = CompletionItemKind.Function;
+  completionItem.sortText = "9";
   return completionItem;
 });

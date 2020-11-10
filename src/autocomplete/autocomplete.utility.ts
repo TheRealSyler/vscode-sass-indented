@@ -55,6 +55,7 @@ export class AutocompleteUtils {
     item.tags = prop.status === 'obsolete' ? [1] : [];
     item.documentation = GetPropertyDescription(prop.name, prop);
     item.kind = CompletionItemKind.Property;
+    item.sortText = "5";
     return item;
   }
 
@@ -71,6 +72,7 @@ export class AutocompleteUtils {
       const item = new CompletionItem(property.name);
       item.detail = property.desc;
       item.kind = CompletionItemKind.Value;
+      item.sortText = "3";
       return item;
     });
   }
@@ -154,6 +156,7 @@ export class AutocompleteUtils {
       completionItem.insertText = new SnippetString(rep + item.body);
       completionItem.detail = item.desc;
       completionItem.kind = CompletionItemKind.Unit;
+      completionItem.sortText = "1";
       units.push(completionItem);
     });
     return units;
@@ -176,12 +179,14 @@ export class AutocompleteUtils {
         item.insertText = rep;
         item.detail = `Import - ${rep}`;
         item.kind = CompletionItemKind.Reference;
+        item.sortText = "1";
         suggestions.push(item);
       } else if (statSync(path + '/' + file).isDirectory()) {
         const item = new CompletionItem(file);
         item.insertText = file;
         item.detail = `Folder - ${file}`;
         item.kind = CompletionItemKind.Folder;
+        item.sortText = "2";
         suggestions.push(item);
       }
     }
@@ -220,6 +225,7 @@ export class AutocompleteUtils {
                       item.kind = CompletionItemKind.Class;
                       item.detail = `Class From: ${fileName}`;
                       item.insertText = new SnippetString('.'.concat(className, '\n\t$0'));
+                      item.sortText = "7";
                       res.push(item);
                     }
                   }
@@ -230,6 +236,7 @@ export class AutocompleteUtils {
                   item.kind = CompletionItemKind.Class;
                   item.detail = `Id From: ${fileName}`;
                   item.insertText = new SnippetString('#'.concat(match, '\n\t$0'));
+                  item.sortText = "7";
                   res.push(item);
                 }
               }
