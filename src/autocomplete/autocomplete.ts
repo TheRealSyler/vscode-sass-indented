@@ -63,6 +63,7 @@ class SassCompletion implements CompletionItemProvider {
     let classesAndIds = [];
     let functions = [];
     let variables: CompletionItem[] = [];
+    let htmlElements = [];
 
     let completions: CompletionItem[] = [];
     if (document.languageId === 'vue' || document.languageId === 'svelte') {
@@ -149,6 +150,7 @@ class SassCompletion implements CompletionItemProvider {
         classesAndIds = Utility.getHtmlClassOrIdCompletions(document);
         atRules = sassAt;
         properties = Utility.getProperties(currentWord);
+        htmlElements = Utility.getHtmlElements(currentWord);
       }
 
       completions = [].concat(
@@ -160,7 +162,8 @@ class SassCompletion implements CompletionItemProvider {
         atRules,
         classesAndIds,
         propertyScopedModules,
-        globalScopeModules
+        globalScopeModules,
+        htmlElements
       );
     }
 

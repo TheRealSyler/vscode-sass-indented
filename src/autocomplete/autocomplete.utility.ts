@@ -16,6 +16,7 @@ import { StateElement, State } from '../extension';
 import { getSassModule } from './schemas/autocomplete.builtInModules';
 import { generatedPropertyData } from './schemas/autocomplete.generatedData';
 import { positionValues, lineStyleValues, lineWidthValues, repeatValues } from './schemas/autocomplete.valueGroups';
+import { htmlTags } from './schemas/autocomplete.html';
 import { GetPropertyDescription } from '../utilityFunctions';
 
 export const importCssVariableRegex = /^[\t ]*\/\/[\t ]*import[\t ]*css-variables[\t ]*from/;
@@ -58,6 +59,18 @@ export class AutocompleteUtils {
     item.kind = CompletionItemKind.Property;
     item.sortText = "5";
     return item;
+  }
+
+  static getHtmlElements(currentWord: string): CompletionItem[] {
+    if (isClassOrId(currentWord) || isAtRule(currentWord)) {
+      return [];
+    }
+    return htmlTags.map((tagName) => {
+      const item = new CompletionItem(tagName);
+      item.kind = CompletionItemKind.Class;
+      item.sortText = "3";
+      return item;
+    });
   }
 
   /** Returns values for current property for completion list */
