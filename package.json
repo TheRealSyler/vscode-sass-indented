@@ -2,9 +2,18 @@
   "name": "sass-indented",
   "displayName": "Sass",
   "description": "Indented Sass syntax Highlighting, Autocomplete & Formatter",
-  "version": "1.8.12",
+  "version": "1.8.13",
   "icon": "resources/images/sass-logo-seal.png",
   "publisher": "syler",
+  "scripts": {
+    "pre:distribute": "yarn test && yarn build",
+    "distribute": "ts-node ./src/distribute.ts",
+    "build": "tsc -b && suf && webpack --mode production",
+    "watch": "webpack --mode development",
+    "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
+    "test": "ts-node src/test/test.ts",
+    "test:watch": "nodemon src/test/test.ts -- DEV_MODE"
+  },
   "private": true,
   "repository": {
     "type": "git",
@@ -139,15 +148,6 @@
         "path": "./syntaxes/sass.hover.highlighting.json"
       }
     ]
-  },
-  "scripts": {
-    "pre:distribute": "yarn test && yarn build",
-    "distribute": "ts-node ./src/distribute.ts",
-    "build": "tsc -b && suf && webpack --mode production",
-    "watch": "webpack --mode development",
-    "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
-    "test": "ts-node src/test/test.ts",
-    "test:watch": "nodemon src/test/test.ts -- DEV_MODE"
   },
   "devDependencies": {
     "@types/node": "^8.10.59",
