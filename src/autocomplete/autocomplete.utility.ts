@@ -15,6 +15,7 @@ import { isClassOrId, isAtRule } from 'suf-regex';
 import { StateElement, State } from '../extension';
 import { getSassModule } from './schemas/autocomplete.builtInModules';
 import { generatedPropertyData } from './schemas/autocomplete.generatedData';
+import { positionValues, lineStyleValues, lineWidthValues, repeatValues } from './schemas/autocomplete.valueGroups';
 import { GetPropertyDescription } from '../utilityFunctions';
 
 export const importCssVariableRegex = /^[\t ]*\/\/[\t ]*import[\t ]*css-variables[\t ]*from/;
@@ -62,10 +63,31 @@ export class AutocompleteUtils {
   /** Returns values for current property for completion list */
   static getPropertyValues(currentWord: string): CompletionItem[] {
     const property = AutocompleteUtils.getPropertyName(currentWord);
-    const values = AutocompleteUtils.findPropertySchema(property)?.values;
-
-    if (!values) {
+    const schema = AutocompleteUtils.findPropertySchema(property);
+    if(!schema) {
       return [];
+    };
+
+    let values = [];
+
+    if (schema.values) {
+      values.push(...schema.values);
+    }
+
+    if(schema.restriction) {
+      const restrictions = schema.restriction.split(", ");
+      if(restrictions.includes("position")) {
+        values.push(...positionValues);
+      }
+      if(restrictions.includes("repeat")) {
+        values.push(...repeatValues);
+      }
+      if(restrictions.includes("line-style")) {
+        values.push(...lineStyleValues);
+      }
+      if(restrictions.includes("line-width")) {
+        values.push(...lineWidthValues);
+      }
     }
 
     return values.map((property) => {
