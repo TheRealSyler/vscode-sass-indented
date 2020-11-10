@@ -63,6 +63,7 @@ class SassCompletion implements CompletionItemProvider {
     let classesAndIds = [];
     let functions = [];
     let variables: CompletionItem[] = [];
+    let htmlElements = [];
 
     let completions: CompletionItem[] = [];
     if (document.languageId === 'vue' || document.languageId === 'svelte') {
@@ -141,6 +142,7 @@ class SassCompletion implements CompletionItemProvider {
             );
             completionItem.detail = element.item.detail;
             completionItem.kind = element.item.kind;
+            completionItem.sortText = "6";
             variables.push(completionItem);
           }
         });
@@ -148,6 +150,7 @@ class SassCompletion implements CompletionItemProvider {
         classesAndIds = Utility.getHtmlClassOrIdCompletions(document);
         atRules = sassAt;
         properties = Utility.getProperties(currentWord);
+        htmlElements = Utility.getHtmlElements(currentWord);
       }
 
       completions = [].concat(
@@ -159,7 +162,8 @@ class SassCompletion implements CompletionItemProvider {
         atRules,
         classesAndIds,
         propertyScopedModules,
-        globalScopeModules
+        globalScopeModules,
+        htmlElements
       );
     }
 
@@ -176,6 +180,7 @@ class SassCompletion implements CompletionItemProvider {
         completionItem.insertText = Utility.mergeNamespace(element.item.insert, namespace);
         completionItem.documentation = new MarkdownString(element.item.detail);
         completionItem.kind = element.item.kind;
+        completionItem.sortText = "1";
         variables.push(completionItem);
       }
     });

@@ -15,6 +15,8 @@ import { isClassOrId, isAtRule } from 'suf-regex';
 import { StateElement, State } from '../extension';
 import { getSassModule } from './schemas/autocomplete.builtInModules';
 import { generatedPropertyData } from './schemas/autocomplete.generatedData';
+import { positionValues, lineStyleValues, lineWidthValues, repeatValues } from './schemas/autocomplete.valueGroups';
+import { htmlTags } from './schemas/autocomplete.html';
 import { GetPropertyDescription } from '../utilityFunctions';
 
 export const importCssVariableRegex = /^[\t ]*\/\/[\t ]*import[\t ]*css-variables[\t ]*from/;
@@ -55,22 +57,57 @@ export class AutocompleteUtils {
     item.tags = prop.status === 'obsolete' ? [1] : [];
     item.documentation = GetPropertyDescription(prop.name, prop);
     item.kind = CompletionItemKind.Property;
+    item.sortText = "5";
     return item;
+  }
+
+  static getHtmlElements(currentWord: string): CompletionItem[] {
+    if (isClassOrId(currentWord) || isAtRule(currentWord)) {
+      return [];
+    }
+    return htmlTags.map((tagName) => {
+      const item = new CompletionItem(tagName);
+      item.kind = CompletionItemKind.Class;
+      item.sortText = "3";
+      return item;
+    });
   }
 
   /** Returns values for current property for completion list */
   static getPropertyValues(currentWord: string): CompletionItem[] {
     const property = AutocompleteUtils.getPropertyName(currentWord);
-    const values = AutocompleteUtils.findPropertySchema(property)?.values;
-
-    if (!values) {
+    const schema = AutocompleteUtils.findPropertySchema(property);
+    if(!schema) {
       return [];
+    }
+
+    let values = [];
+
+    if (schema.values) {
+      values.push(...schema.values);
+    }
+
+    if(schema.restriction) {
+      const restrictions = schema.restriction.split(", ");
+      if(restrictions.includes("position")) {
+        values.push(...positionValues);
+      }
+      if(restrictions.includes("repeat")) {
+        values.push(...repeatValues);
+      }
+      if(restrictions.includes("line-style")) {
+        values.push(...lineStyleValues);
+      }
+      if(restrictions.includes("line-width")) {
+        values.push(...lineWidthValues);
+      }
     }
 
     return values.map((property) => {
       const item = new CompletionItem(property.name);
       item.detail = property.desc;
       item.kind = CompletionItemKind.Value;
+      item.sortText = "3";
       return item;
     });
   }
@@ -154,6 +191,7 @@ export class AutocompleteUtils {
       completionItem.insertText = new SnippetString(rep + item.body);
       completionItem.detail = item.desc;
       completionItem.kind = CompletionItemKind.Unit;
+      completionItem.sortText = "1";
       units.push(completionItem);
     });
     return units;
@@ -176,12 +214,14 @@ export class AutocompleteUtils {
         item.insertText = rep;
         item.detail = `Import - ${rep}`;
         item.kind = CompletionItemKind.Reference;
+        item.sortText = "1";
         suggestions.push(item);
       } else if (statSync(path + '/' + file).isDirectory()) {
         const item = new CompletionItem(file);
         item.insertText = file;
         item.detail = `Folder - ${file}`;
         item.kind = CompletionItemKind.Folder;
+        item.sortText = "2";
         suggestions.push(item);
       }
     }
@@ -220,6 +260,7 @@ export class AutocompleteUtils {
                       item.kind = CompletionItemKind.Class;
                       item.detail = `Class From: ${fileName}`;
                       item.insertText = new SnippetString('.'.concat(className, '\n\t$0'));
+                      item.sortText = "7";
                       res.push(item);
                     }
                   }
@@ -230,6 +271,7 @@ export class AutocompleteUtils {
                   item.kind = CompletionItemKind.Class;
                   item.detail = `Id From: ${fileName}`;
                   item.insertText = new SnippetString('#'.concat(match, '\n\t$0'));
+                  item.sortText = "7";
                   res.push(item);
                 }
               }
