@@ -79,7 +79,7 @@ export class AutocompleteUtils {
     const schema = AutocompleteUtils.findPropertySchema(property);
     if(!schema) {
       return [];
-    };
+    }
 
     let values = [];
 
