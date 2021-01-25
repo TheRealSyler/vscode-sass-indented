@@ -53,7 +53,7 @@
     s.color "^0.0.11"
     tslib "^1.10.0"
 
-"@sorg/log@^2.0.1", "@sorg/log@^2.1.0":
+"@sorg/log@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@sorg/log/-/log-2.2.0.tgz#1481d0a2b589cd10ea5c2513f992e6760e2482ef"
   integrity sha512-w5aH2k4caUWxO3dzJ0+GUJJGSqsg0gT6myhypQumlJXsKzYqzsZGZRWA2s/0zQIx6+B2wDvdweVogiWMAAbaKw==
@@ -1859,9 +1859,9 @@ inherits@2.0.3:
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
 ini@^1.3.4, ini@^1.3.5, ini@~1.3.0:
-  version "1.3.8"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
-  integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
+  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
 interpret@^1.4.0:
   version "1.4.0"
@@ -3190,6 +3190,11 @@ s.color@0.0.13:
   dependencies:
     suf-cli "^0.1.0"
 
+s.color@0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/s.color/-/s.color-0.0.15.tgz#6b32cd22d8dba95703a5122ddede2020a1560186"
+  integrity sha512-AUNrbEUHeKY8XsYr/DYpl+qk5+aM+DChopnWOPEzn8YKzOhv4l2zH6LzZms3tOZP3wwdOyc0RmTciyi46HLIuA==
+
 s.color@^0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/s.color/-/s.color-0.0.11.tgz#9e9eded020e66cb758697ed601b6cef545fabe76"
@@ -3217,14 +3222,13 @@ safer-buffer@^2.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass-formatter@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/sass-formatter/-/sass-formatter-0.5.0.tgz#22e3bbefb5abc9465b8db62fe6e404e4283c019f"
-  integrity sha512-JaWbvLMvyHsSZ/E8AFZ98S9Jdl/To3dyqf+ihunWMsji3YVXK+fZrwKRKoSHQvQDWv/KgkW5RH6o4X4/QYe8Mw==
+sass-formatter@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/sass-formatter/-/sass-formatter-0.6.0.tgz#aea6637d19d2d347fe4997aada2772a8c28d5411"
+  integrity sha512-60U7R9VYGMlR5eaw+Y+/zHihGQbUxnp1Hfxu9sTTiKbwC5dESs5tmmuNYQvhSMbbSiU9yvRz3uRA8TF2p89Rww==
   dependencies:
-    "@sorg/log" "^2.0.1"
-    suf-regex "^0.0.24"
-    tslib "^1.10.0"
+    suf-log "^2.5.3"
+    suf-regex "^0.2.0"
 
 schema-utils@^1.0.0:
   version "1.0.0"
@@ -3535,6 +3539,13 @@ suf-cli@^0.1.0, suf-cli@^0.1.1:
     suf-node "^1.1.1"
     typescript "^3.8.3"
 
+suf-log@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/suf-log/-/suf-log-2.5.3.tgz#0919a7fceea532a99b578c97814c4e335b2d64d1"
+  integrity sha512-KvC8OPjzdNOe+xQ4XWJV2whQA0aM1kGVczMQ8+dStAO6KfEB140JEVQ9dE76ONZ0/Ylf67ni4tILPJB41U0eow==
+  dependencies:
+    s.color "0.0.15"
+
 suf-node@^1.1.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/suf-node/-/suf-node-1.2.1.tgz#9f26d7be58df0f259a8c6d9279df95830fe667e8"
@@ -3550,10 +3561,10 @@ suf-regex@^0.0.20:
   dependencies:
     del-cli "^3.0.0"
 
-suf-regex@^0.0.24:
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/suf-regex/-/suf-regex-0.0.24.tgz#81542c5d2f23b35351efc53b7c3fe6e495726af9"
-  integrity sha512-T2fHzVqfXQJBuznudW/rcbMIli5yu8K1bEypWNDqDpK+BSgB0tczM2P0QZrlWn7t6wBk4XdtXh0qnxDC51LOHQ==
+suf-regex@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/suf-regex/-/suf-regex-0.2.0.tgz#0f9426c61b8a08f8d603b830a7bd082a98df8a6a"
+  integrity sha512-6TYWPD9ArzIPVVjD/oOakwgSetX4ggGqV+0PSAAPptK2ZY0GkqyDW3CmqN5B4PPmq1+jy6LVa0twwILPMmDgPw==
   dependencies:
     del-cli "^3.0.0"
 

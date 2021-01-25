@@ -10,7 +10,7 @@ import {
 } from 'vscode';
 
 import { AutocompleteUtils } from '../../autocomplete/autocomplete.utility';
-import { isProperty, isVar, isClassOrId } from 'suf-regex';
+import { isProperty, isVar } from 'suf-regex';
 import { GetPropertyDescription } from '../../utilityFunctions';
 import { basename } from 'path';
 import { Searcher } from '../../autocomplete/search/autocomplete.search';

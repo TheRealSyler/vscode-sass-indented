@@ -1,7 +1,7 @@
 // publishing script
 import { config } from 'dotenv';
 import { Exec } from 'suf-node';
-import { callbackify } from 'util';
+
 config();
 
 (async () => {
