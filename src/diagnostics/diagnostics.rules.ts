@@ -10,12 +10,12 @@ import {
 } from 'vscode';
 
 import { DiagnosticUtility as utility } from './diagnostics.utility';
-import { isProperty, isHtmlTag, isVar, hasPropertyValueSpace, isScssOrCss, splitOnce } from 'suf-regex';
+import { isProperty, isHtmlTag, isVar, hasPropertyValueSpace, isScssOrCss } from 'suf-regex';
 
 export class DiagnosticRules {
   private _VARS: { [key: string]: { range: Range } } = {};
   private _DOCUMENT: TextDocument;
-  constructor() {}
+  constructor() { }
   reset(document: TextDocument) {
     this._VARS = {};
     this._DOCUMENT = document;
@@ -90,7 +90,7 @@ export class DiagnosticRules {
   }
   private _CHECK_VAR(line: TextLine, range: Range) {
     const diagnostics: Diagnostic[] = [];
-    const key = splitOnce(line.text, ':').key;
+    const key = line.text.split(/:.*/)[0]
     const key_T = key.trim();
     if (this._VARS.hasOwnProperty(key_T)) {
       const error = new Diagnostic(range, utility.ruleMessages.variable[0], Severity.Warning);
