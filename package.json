@@ -10,7 +10,6 @@
     "distribute": "ts-node ./src/distribute.ts",
     "build": "tsc -b && suf && webpack --mode production",
     "watch": "webpack --mode development",
-    "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
     "test": "ts-node src/test/test.ts",
     "test:watch": "nodemon src/test/test.ts -- DEV_MODE"
   },
@@ -159,7 +158,6 @@
     "ts-loader": "^6.2.2",
     "ts-node": "^8.8.2",
     "tslib": "^1.11.1",
-    "tslint": "^5.20.1",
     "typescript": "^3.8.3",
     "vscode-test": "^1.4.0",
     "webpack": "^4.42.1",
