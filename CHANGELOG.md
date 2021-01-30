@@ -2,6 +2,8 @@
 
 | Version | Date       | Changelog                                                                                                                                       |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.8.15   | 26.01.2021  | Update sass-formatter, merged [sass-formatter#42](https://github.com/TheRealSyler/sass-formatter/issues/42) and [sass-formatter#43](https://github.com/TheRealSyler/sass-formatter/issues/43) by [@mesqueeb](https://github.com/mesqueeb)                                                                                                                       |
+| 1.8.14   | 25.01.2021  | Update sass-formatter.                                                                                                                          |
 | 1.8.13  | 10.11.2020 | merge [Various autocomplete improvements](https://github.com/TheRealSyler/vscode-sass-indented/pull/63) by [@dvdkon](https://github.com/dvdkon) |
 | 1.8.12  | 4.10.2020  | add CRLF comparability                                                                                                                          |
 | 1.8.11  | 4.9.2020   | update sass-formatter fix atInclude regex                                                                                                       |
@@ -21,7 +23,7 @@
 | 1.7.3   | 2.1.2020   | Fix Readme                                                                                                                                      |
 | 1.7.2   | 2.1.2020   | Update sass-formatter.                                                                                                                          |
 | 1.7.1   | 28.11.2019 | Readme Update                                                                                                                                   |
-| 1.7.0   | 27.11.2019 | Added tests for sass language grammar, minor fixes                                                                                              |
+| 1.7.0   | 27.11.2019 | Added tests for sass language grammar, minor fixes                                                                                              | 
 | 1.6.9   | 12.11.2019 | Added experimental data and fixed syntax highlighting.                                                                                          |
 | 1.6.8   | 6.11.2019  | Added @use Support and fixed color decorators.                                                                                                  |
 | 1.6.7   | 8.10.2019  | updated formatter dependency                                                                                                                    |
