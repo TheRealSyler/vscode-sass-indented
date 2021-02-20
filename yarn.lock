@@ -3204,13 +3204,13 @@ safer-buffer@^2.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass-formatter@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/sass-formatter/-/sass-formatter-0.7.0.tgz#d7c93d4152a7e6870f1bebacbe489a1f42432382"
-  integrity sha512-51HGr2OT1tbRkSZhzvVFaKKu7p8FMUvnxu6JJCnQCYgdR2CD7AFzYEs3vaUpvds07ZgFKlbpVYooqao2wDK6nw==
+sass-formatter@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/sass-formatter/-/sass-formatter-0.7.1.tgz#0792fe878ceef5585c9c54efb1c1e6b3364f7c3b"
+  integrity sha512-toOG7ItpYaHWTK5nHFZCg6AQ0Tbm5/SzzgCa6Ut/TxX39BZTRiV9ikpGlEmEIou3CRPPmcIaG/91XtfmP6+HVQ==
   dependencies:
     suf-log "^2.5.3"
-    suf-regex "^0.2.1"
+    suf-regex "^0.3.2"
 
 schema-utils@^1.0.0:
   version "1.0.0"
@@ -3543,10 +3543,10 @@ suf-regex@^0.0.20:
   dependencies:
     del-cli "^3.0.0"
 
-suf-regex@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/suf-regex/-/suf-regex-0.2.1.tgz#a2fc8a541d49490a39759df23d78186c1455b4c9"
-  integrity sha512-xOkNNVPnLZ4NFe3Nn+FPtF4QGUkDphrKjQZagl7t4gaRt0izQwX0Agd4koxL/J7TQK4LfyZmrkVVGdxNlHNjuw==
+suf-regex@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/suf-regex/-/suf-regex-0.3.2.tgz#f3494a59ad85166160758e161128bbdbb064eea0"
+  integrity sha512-Fc9PBP7s/WNXCMbbw7cfbh7MtSU8/JpB3xHUzkYsMXL5hT9RSmwLPeGryAKrtkz45gQ+X4dkNi7XpJqEXMK7RA==
   dependencies:
     del-cli "^3.0.0"
 
