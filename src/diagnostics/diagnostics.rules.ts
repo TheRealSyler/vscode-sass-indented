@@ -35,7 +35,7 @@ export class DiagnosticRules {
 
   private _CHECK_PROPERTY(line: TextLine, range: Range) {
     const diagnostics: Diagnostic[] = [];
-    if (isProperty(line.text, true)) {
+    if (isProperty(line.text)) {
       const warning = new Diagnostic(range, utility.ruleMessages.property[0], Severity.Warning);
       warning.code = 'Property: 0';
       warning.source = 'Sass ';
