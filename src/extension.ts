@@ -107,42 +107,42 @@ export function activate(context: vscode.ExtensionContext) {
     '&'
   );
 
-  const diagnostics = new DiagnosticsProvider();
-  const diagnosticsCollection = vscode.languages.createDiagnosticCollection('sass');
+  // const diagnostics = new DiagnosticsProvider();
+  // const diagnosticsCollection = vscode.languages.createDiagnosticCollection('sass');
 
-  if (vscode.window.activeTextEditor) {
-    if (config.get('sass.lint.enable')) {
-      diagnostics.update(vscode.window.activeTextEditor.document, diagnosticsCollection);
-    }
-  }
+  // if (vscode.window.activeTextEditor) {
+  //   if (config.get('sass.lint.enable')) {
+  //     diagnostics.update(vscode.window.activeTextEditor.document, diagnosticsCollection);
+  //   }
+  // }
 
-  const changeDisposable = vscode.workspace.onDidChangeTextDocument((l) => {
-    if (config.get('sass.lint.enable')) {
-      diagnostics.update(l.document, diagnosticsCollection);
-    }
-  });
+  // const changeDisposable = vscode.workspace.onDidChangeTextDocument((l) => {
+  //   if (config.get('sass.lint.enable')) {
+  //     diagnostics.update(l.document, diagnosticsCollection);
+  //   }
+  // });
 
-  context.subscriptions.push(
-    vscode.window.onDidChangeActiveTextEditor((editor) => {
-      if (editor) {
-        if (config.get('sass.lint.enable')) {
-          diagnostics.update(editor.document, diagnosticsCollection);
-        }
-      }
-    })
-  );
+  // context.subscriptions.push(
+  //   vscode.window.onDidChangeActiveTextEditor((editor) => {
+  //     if (editor) {
+  //       if (config.get('sass.lint.enable')) {
+  //         diagnostics.update(editor.document, diagnosticsCollection);
+  //       }
+  //     }
+  //   })
+  // );
 
-  context.subscriptions.push(
-    vscode.workspace.onDidChangeConfiguration((configEvent: vscode.ConfigurationChangeEvent) => {
-      if (configEvent.affectsConfiguration('sass')) {
-        setSassLanguageConfiguration(config, diagnosticsCollection);
-      }
-    })
-  );
+  // context.subscriptions.push(
+  //   vscode.workspace.onDidChangeConfiguration((configEvent: vscode.ConfigurationChangeEvent) => {
+  //     if (configEvent.affectsConfiguration('sass')) {
+  //       setSassLanguageConfiguration(config, diagnosticsCollection);
+  //     }
+  //   })
+  // );
 
   context.subscriptions.push(commandManager);
 
-  context.subscriptions.push(changeDisposable);
+  // context.subscriptions.push(changeDisposable);
 
   context.subscriptions.push(hoverDisposable);
   context.subscriptions.push(colorDisposable);
@@ -160,9 +160,9 @@ function setSassLanguageConfiguration(
 ) {
   const disableAutoIndent: boolean = config.get('sass.disableAutoIndent');
 
-  if (!config.get('sass.lint.enable') && diagnosticsCollection !== undefined) {
-    diagnosticsCollection.clear();
-  }
+  // if (!config.get('sass.lint.enable') && diagnosticsCollection !== undefined) {
+  //   diagnosticsCollection.clear();
+  // }
 
   vscode.languages.setLanguageConfiguration('sass', {
     wordPattern: /(#?-?\d*\.\d\w*%?)|([$@#!.:]?[\w-?]+%?)|[$@#!.]/g,
@@ -177,4 +177,4 @@ function setSassLanguageConfiguration(
   });
 }
 
-export function deactivate() {}
+export function deactivate() { }

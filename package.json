@@ -77,11 +77,6 @@
           "default": false,
           "description": "enables debug mode."
         },
-        "sass.lint.enable": {
-          "type": "boolean",
-          "default": false,
-          "description": "Enables sass lint."
-        },
         "sass.andStared": {
           "type": "array",
           "default": [
