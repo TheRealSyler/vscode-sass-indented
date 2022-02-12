@@ -1,5 +1,5 @@
 <span id="BADGE_GENERATION_MARKER_0"></span>
-[![circleci](https://img.shields.io/circleci/build/github/TheRealSyler/vscode-sass-indented)](https://app.circleci.com/github/TheRealSyler/vscode-sass-indented/pipelines) [![Custom](https://www.codefactor.io/repository/github/therealsyler/vscode-sass-indented/badge)](https://www.codefactor.io/repository/github/therealsyler/vscode-sass-indented) [![vscV](https://img.shields.io/visual-studio-marketplace/v/syler.sass-indented)](https://marketplace.visualstudio.com/items?itemName=syler.sass-indented) [![vscD](https://img.shields.io/visual-studio-marketplace/d/syler.sass-indented)](https://marketplace.visualstudio.com/items?itemName=syler.sass-indented) [![vscI](https://img.shields.io/visual-studio-marketplace/i/syler.sass-indented)](https://marketplace.visualstudio.com/items?itemName=syler.sass-indented) [![githubLastCommit](https://img.shields.io/github/last-commit/TheRealSyler/vscode-sass-indented)](https://github.com/TheRealSyler/vscode-sass-indented) [![githubIssues](https://img.shields.io/github/issues/TheRealSyler/vscode-sass-indented?color=lightgrey)](https://github.com/TheRealSyler/vscode-sass-indented)
+[![circleci](https://img.shields.io/circleci/build/github/TheRealSyler/vscode-sass-indented)](https://app.circleci.com/pipelines/github/TheRealSyler/vscode-sass-indented) [![Custom](https://www.codefactor.io/repository/github/therealsyler/vscode-sass-indented/badge)](https://www.codefactor.io/repository/github/therealsyler/vscode-sass-indented) [![vscV](https://img.shields.io/visual-studio-marketplace/v/syler.sass-indented)](https://marketplace.visualstudio.com/items?itemName=syler.sass-indented) [![vscD](https://img.shields.io/visual-studio-marketplace/d/syler.sass-indented)](https://marketplace.visualstudio.com/items?itemName=syler.sass-indented) [![vscI](https://img.shields.io/visual-studio-marketplace/i/syler.sass-indented)](https://marketplace.visualstudio.com/items?itemName=syler.sass-indented) [![githubLastCommit](https://img.shields.io/github/last-commit/TheRealSyler/vscode-sass-indented)](https://github.com/TheRealSyler/vscode-sass-indented) [![githubIssues](https://img.shields.io/github/issues/TheRealSyler/vscode-sass-indented?color=lightgrey)](https://github.com/TheRealSyler/vscode-sass-indented)
 <span id="BADGE_GENERATION_MARKER_1"></span>
 
 [![Tested With](https://img.shields.io/badge/Syntax Tested With-test--grammar-red?style=for-the-badge)](https://www.npmjs.com/package/test-grammar)
@@ -25,35 +25,11 @@ ext install sass-indented
 
 > Hover Info
 
-## **Configuration**
-
-Configuration options can be set in the `Sass (Indented)` section of VSCode settings or by editing your `settings.json` directly.
-
-### General
-
-| Option                       | Type    | Default                                     | Description                                                                                               |
-| ---------------------------- | ------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `sass.lint.enable`           | boolean | false                                       | Enables sass lint, its useless at the moment i abandoned the project, i might work on it in the future.   |
-| `sass.disableAutoIndent`     | boolean | false                                       | Stop the extension from automatically indenting when pressing Enter                                       |
-| `sass.disableUnitCompletion` | boolean | true                                        | adds units to the intellisense completions if false.                                                      |
-| `sass.andStared`             | array   | `["active", "focus", "hover", "nth-child"]` | items in this array will be at the top of the completion list (only for items that show after the & sign) |
-
-### Formatter
-
-| Option                         | Type    | Default | Description                                                    |
-| ------------------------------ | ------- | ------- | -------------------------------------------------------------- |
-| `sass.format.enabled`          | boolean | true    | enables the sass formatter.                                    |
-| `sass.format.deleteWhitespace` | boolean | true    | removes trailing whitespace.                                   |
-| `sass.format.deleteEmptyRows`  | boolean | true    | removes empty rows.                                            |
-| `sass.format.setPropertySpace` | boolean | true    | If true space between the property: value, is always set to 1. |
-
 ## Usage tips
 
 ### Variable Completion
 
 You can import using variables and mixins using `@import` or `@use`, if you want to only import the css variables, you can easily do that by using a magic comment `//import css-variables from <File Path>`.
-
-> Note: at the moment all variables are global scoped meaning if you declare a variable inside a class you will get
 
 ## **Bugs**
 

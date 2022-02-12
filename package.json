@@ -2,13 +2,13 @@
   "name": "sass-indented",
   "displayName": "Sass",
   "description": "Indented Sass syntax Highlighting, Autocomplete & Formatter",
-  "version": "1.8.18",
+  "version": "1.8.19",
   "icon": "resources/images/sass-logo-seal.png",
   "publisher": "syler",
   "scripts": {
     "pre:distribute": "yarn test && yarn build",
     "distribute": "ts-node ./src/distribute.ts",
-    "build": "tsc -b && suf && webpack --mode production",
+    "build": "tsc -b && suf b && webpack --mode production",
     "watch": "webpack --mode development",
     "test": "ts-node src/test/test.ts",
     "test:watch": "nodemon src/test/test.ts -- DEV_MODE"
@@ -156,14 +156,14 @@
     "typescript": "^3.8.3",
     "vscode-test": "^1.4.0",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "test-grammar": "^1.0.3"
   },
   "dependencies": {
     "s.color": "0.0.13",
     "sass-formatter": "^0.7.2",
-    "suf-cli": "^0.1.1",
-    "suf-regex": "^0.3.3",
-    "test-grammar": "^1.0.3"
+    "suf-cli": "^0.3.1",
+    "suf-regex": "^0.3.3"
   },
   "license": "MIT"
 }
