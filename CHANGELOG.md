@@ -2,6 +2,7 @@
 
 | Version | Date       | Changelog                                                                                                                                       |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.8.18   | 12.02.2022  | update readme                                                                                                                      |
 | 1.8.18   | 19.08.2021  | disable linter.                                                                                                                      |
 | 1.8.17   | 25.05.2021  | minor formatter fixes.                                                                                                                      |
 | 1.8.15   | 26.01.2021  | Update sass-formatter, merged [sass-formatter#42](https://github.com/TheRealSyler/sass-formatter/issues/42) and [sass-formatter#43](https://github.com/TheRealSyler/sass-formatter/issues/43) by [@mesqueeb](https://github.com/mesqueeb)                                                                                                                       |
