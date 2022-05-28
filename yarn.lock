@@ -3204,13 +3204,12 @@ safer-buffer@^2.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass-formatter@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/sass-formatter/-/sass-formatter-0.7.2.tgz#bfac14c17dd7d3fb3967a5a80f5c34d27ed60daa"
-  integrity sha512-ZGpZC5bWJbv0tiu2glZeLhN85sg3wSySyHxhqov/HZX1/2coczLkY0HXIshrmRC7+G8qiFkeW8Ipl5mS54nl0w==
+sass-formatter@^0.7.4:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/sass-formatter/-/sass-formatter-0.7.4.tgz#d9b9dc0e510a8d102ea4985a42bf96aab2bbd109"
+  integrity sha512-8UMMSv/P5FREyca67k6PP6DsfL5c3XGbt72OKSDsfy9qaEvQPGDtA+v/9ep3An1GF8YV0C8UtgVB/haePza2nA==
   dependencies:
     suf-log "^2.5.3"
-    suf-regex "^0.3.4"
 
 schema-utils@^1.0.0:
   version "1.0.0"
@@ -3554,13 +3553,6 @@ suf-regex@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/suf-regex/-/suf-regex-0.3.3.tgz#58c79903ccd4ee5e3a92ce7621e3316588d2c932"
   integrity sha512-m4sJ3FNqw/gvsWt0vVdI0W/OU95W1D/fVMz+Thogfy/zLT4Q1ZrjdMNU8Zztn2YFxAqfRWfdz0S+kvc51haOzQ==
-  dependencies:
-    del-cli "^3.0.0"
-
-suf-regex@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/suf-regex/-/suf-regex-0.3.4.tgz#8d1e0cafe1646755264895914cf44442a1202132"
-  integrity sha512-2Txjq2T4BrNKM53ACN8ZXzMulrL2ILDpTwWBy/bXX+gYALWB7pGkCVmCrj/TZrFgGWgmujdXoWmYfeyY2Ky4/g==
   dependencies:
     del-cli "^3.0.0"
 

@@ -2,11 +2,12 @@
 
 | Version | Date       | Changelog                                                                                                                                       |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.8.18   | 12.02.2022  | update readme                                                                                                                      |
-| 1.8.18   | 19.08.2021  | disable linter.                                                                                                                      |
-| 1.8.17   | 25.05.2021  | minor formatter fixes.                                                                                                                      |
+| 1.8.20   | 28.05.2022  | update sass-formatter                                                                                                                         |
+| 1.8.19   | 12.02.2022  | update readme                                                                                                                                 |
+| 1.8.18   | 19.08.2021  | disable linter.                                                                                                                               |
+| 1.8.17   | 25.05.2021  | minor formatter fixes.                                                                                                                        |
 | 1.8.15   | 26.01.2021  | Update sass-formatter, merged [sass-formatter#42](https://github.com/TheRealSyler/sass-formatter/issues/42) and [sass-formatter#43](https://github.com/TheRealSyler/sass-formatter/issues/43) by [@mesqueeb](https://github.com/mesqueeb)                                                                                                                       |
-| 1.8.14   | 25.01.2021  | Update sass-formatter.                                                                                                                          |
+| 1.8.14   | 25.01.2021  | Update sass-formatter.                                                                                                                        |
 | 1.8.13  | 10.11.2020 | merge [Various autocomplete improvements](https://github.com/TheRealSyler/vscode-sass-indented/pull/63) by [@dvdkon](https://github.com/dvdkon) |
 | 1.8.12  | 4.10.2020  | add CRLF comparability                                                                                                                          |
 | 1.8.11  | 4.9.2020   | update sass-formatter fix atInclude regex                                                                                                       |
