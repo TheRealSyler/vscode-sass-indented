@@ -108,6 +108,11 @@
   resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.68.0.tgz#c0864e4ea43c509bfc6b53f4e91aa923fd0475b8"
   integrity sha512-duBwEK5ta/eBBMJMQ7ECMEsMvlE3XJdRGh3xoS1uOO4jl2Z4LPBl5vx8WvBP10ERAgDRmIt/FaSD4RHyBGbChw==
 
+"@vscode/web-custom-data@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@vscode/web-custom-data/-/web-custom-data-0.4.0.tgz#27fe11e8a18d6d94e891bf43d6409e7a452bc48e"
+  integrity sha512-I9s7+c+YTfQjaeOEC9lcDPH6B85fsxnuQKiGcmDRhvd/1jAyp8z8ZeFO9RrDCjZWTrqdLrBKkwhgXZL9ank5Sg==
+
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"
@@ -4088,6 +4093,11 @@ vsce@~1.84.0:
     url-join "^1.1.0"
     yauzl "^2.3.1"
     yazl "^2.2.2"
+
+vscode-languageserver-types@^3.17.1:
+  version "3.17.1"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.17.1.tgz#c2d87fa7784f8cac389deb3ff1e2d9a7bef07e16"
+  integrity sha512-K3HqVRPElLZVVPtMeKlsyL9aK0GxGQpvtAUTfX4k7+iJ4mc1M+JM+zQwkgGy2LzY0f0IAafe8MKqIkJrxfGGjQ==
 
 vscode-test@^1.4.0:
   version "1.6.1"
