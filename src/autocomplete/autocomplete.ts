@@ -6,7 +6,6 @@
   Original stylus version: https://github.com/d4rkr00t/language-stylus
 */
 import {
-  CancellationToken,
   CompletionItem,
   CompletionItemProvider,
   Position,
@@ -44,8 +43,7 @@ class SassCompletion implements CompletionItemProvider {
   }
   provideCompletionItems(
     document: TextDocument,
-    position: Position,
-    token: CancellationToken
+    position: Position
   ): CompletionItem[] {
     const start = new Position(position.line, 0);
     const range = new Range(start, position);

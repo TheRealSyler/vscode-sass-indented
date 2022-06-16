@@ -5,24 +5,35 @@ import {
   TextDocument,
   Position,
   ExtensionContext,
-} from 'vscode';
+} from "vscode";
 
-import sassSchemaUnits from './schemas/autocomplete.units';
-import { readdirSync, statSync, readFileSync } from 'fs';
-import { join, normalize, basename } from 'path';
-import { BasicRawCompletion } from './autocomplete.interfaces';
-import { isClassOrId, isAtRule } from 'suf-regex';
-import { StateElement, State } from '../extension';
-import { getSassModule } from './schemas/autocomplete.builtInModules';
-import { generatedPropertyData } from './schemas/autocomplete.generatedData';
-import { positionValues, lineStyleValues, lineWidthValues, repeatValues } from './schemas/autocomplete.valueGroups';
-import { htmlTags } from './schemas/autocomplete.html';
-import { GetPropertyDescription } from '../utilityFunctions';
+import sassSchemaUnits from "./schemas/autocomplete.units";
+import { readdirSync, statSync, readFileSync } from "fs";
+import { join, normalize, basename } from "path";
+import { BasicRawCompletion, IPropertyData } from "./autocomplete.interfaces";
+import { isClassOrId, isAtRule } from "suf-regex";
+import { StateElement, State } from "../extension";
+import { getSassModule } from "./schemas/autocomplete.builtInModules";
+import { generatedPropertyData } from "./schemas/autocomplete.generatedData";
+import {
+  positionValues,
+  lineStyleValues,
+  lineWidthValues,
+  repeatValues,
+} from "./schemas/autocomplete.valueGroups";
+import { htmlTags } from "./schemas/autocomplete.html";
+import { GetPropertyDescription } from "../utilityFunctions";
+import { cssData } from "./schemas/generatedData/rawCssData";
+import { CompletionItemTag, MarkupContent } from "vscode-languageserver-types";
 
-export const importCssVariableRegex = /^[\t ]*\/\/[\t ]*import[\t ]*css-variables[\t ]*from/;
-const importPathRegex = /(@import|@use|\/\/[\t ]*import[\t ]*css-variables[\t ]*from)[\t ]*['"]?([\w-]*)['"]?/;
-const getImportsRegex = /^[\t ]*(@import|@use|\/\/[\t ]*import[\t ]*css-variables[\t ]*from){1}.*/gm;
-const importAtPathRegex = /^[\t ]*(@import|@use)[\t ]*['"]?(.*?)['"]?[\t ]*([\t ]+as.*)?$/;
+export const importCssVariableRegex =
+  /^[\t ]*\/\/[\t ]*import[\t ]*css-variables[\t ]*from/;
+const importPathRegex =
+  /(@import|@use|\/\/[\t ]*import[\t ]*css-variables[\t ]*from)[\t ]*['"]?([\w-]*)['"]?/;
+const getImportsRegex =
+  /^[\t ]*(@import|@use|\/\/[\t ]*import[\t ]*css-variables[\t ]*from){1}.*/gm;
+const importAtPathRegex =
+  /^[\t ]*(@import|@use)[\t ]*['"]?(.*?)['"]?[\t ]*([\t ]+as.*)?$/;
 const replaceQuotesRegex = /[\t ]*['"]?([\w-]*?)['"]?[\t ]*/;
 
 export interface ImportsItem {
@@ -34,7 +45,7 @@ export interface ImportsItem {
 export class AutocompleteUtils {
   /** Formats property name */
   static getPropertyName(currentWord: string): string {
-    return currentWord.trim().replace(':', ' ').split(' ')[0];
+    return currentWord.trim().replace(":", " ").split(" ")[0];
   }
 
   /** Search for property in cssSchema */
@@ -42,19 +53,66 @@ export class AutocompleteUtils {
     return generatedPropertyData[property];
   }
 
+  // TODO: Cleanup getProperties, convertRawProperty, convertOptionalMarkup
   /** Returns property list for completion */
   static getProperties(currentWord: string): CompletionItem[] {
     if (isClassOrId(currentWord) || isAtRule(currentWord)) {
       return [];
     }
-    return Object.values(generatedPropertyData).map(AutocompleteUtils.mapPropertyCompletionItem);
+    // const old = Object.values(generatedPropertyData)
+    //       .map(AutocompleteUtils.mapPropertyCompletionItem);
+
+    const completionItems = cssData.properties.map((rawProp: IPropertyData) =>
+        this.mapPropertyCompletionItem(this.convertRawProperty(rawProp)));
+
+    return completionItems;
   }
 
-  private static mapPropertyCompletionItem(prop: BasicRawCompletion): any {
+  // convert IPropertyData to BasicRawCompletion
+  private static convertRawProperty(rawProp: IPropertyData): BasicRawCompletion {
+    // PROBLEM HERE
+    const convertedProp: BasicRawCompletion = {
+      name: rawProp.name,
+      desc: this.convertOptionalMarkup(rawProp.description),
+      browsers: rawProp.browsers?.join(","),
+      status: rawProp.status,
+      values: rawProp.values?.map((val) => {
+        return {
+          name: val.name,
+          desc: this.convertOptionalMarkup(val.description),
+          browsers: val.browsers?.join(","),
+        };
+      }),
+    };
+
+    const mdnUrl = rawProp.references?.find(
+      (ref) => ref.name === "MDN Reference"
+    ).name;
+    if (mdnUrl) {
+      convertedProp["mdn_url"] = mdnUrl;
+    }
+
+    return convertedProp;
+  }
+
+  // converts [string | MarkupContent] type to string
+  private static convertOptionalMarkup(val: string | MarkupContent): string {
+    if (val === undefined) {
+      return undefined
+    }
+    if (typeof val === "string") {
+      return val;
+    } else {
+      return val.value;
+    }
+  }
+
+  private static mapPropertyCompletionItem(prop: BasicRawCompletion): CompletionItem {
     const item = new CompletionItem(prop.name);
-    item.insertText = prop.name.concat(': ');
+    item.insertText = prop.name.concat(": ");
     item.detail = prop.desc;
-    item.tags = prop.status === 'obsolete' ? [1] : [];
+    item.tags =
+      prop.status === "obsolete" ? [CompletionItemTag.Deprecated] : [];
     item.documentation = GetPropertyDescription(prop.name, prop);
     item.kind = CompletionItemKind.Property;
     item.sortText = "5";
@@ -77,7 +135,7 @@ export class AutocompleteUtils {
   static getPropertyValues(currentWord: string): CompletionItem[] {
     const property = AutocompleteUtils.getPropertyName(currentWord);
     const schema = AutocompleteUtils.findPropertySchema(property);
-    if(!schema) {
+    if (!schema) {
       return [];
     }
 
@@ -87,18 +145,18 @@ export class AutocompleteUtils {
       values.push(...schema.values);
     }
 
-    if(schema.restriction) {
+    if (schema.restriction) {
       const restrictions = schema.restriction.split(", ");
-      if(restrictions.includes("position")) {
+      if (restrictions.includes("position")) {
         values.push(...positionValues);
       }
-      if(restrictions.includes("repeat")) {
+      if (restrictions.includes("repeat")) {
         values.push(...repeatValues);
       }
-      if(restrictions.includes("line-style")) {
+      if (restrictions.includes("line-style")) {
         values.push(...lineStyleValues);
       }
-      if(restrictions.includes("line-width")) {
+      if (restrictions.includes("line-width")) {
         values.push(...lineWidthValues);
       }
     }
@@ -126,35 +184,37 @@ export class AutocompleteUtils {
       }
       const match = m[0];
       // prevent commented lines from being imported.
-      if (!match.startsWith('//')) {
-        let path = match.replace(importAtPathRegex, '$2');
+      if (!match.startsWith("//")) {
+        let path = match.replace(importAtPathRegex, "$2");
         let namespace = match
-          .replace(/(.*?as |@use)[\t ]*['"]?.*?([\w-]*?)['"]?[\t ]*$/, '$2')
+          .replace(/(.*?as |@use)[\t ]*['"]?.*?([\w-]*?)['"]?[\t ]*$/, "$2")
           .trim();
-        namespace = namespace === '*' || match.startsWith('@import') ? undefined : namespace;
+        namespace = namespace === "*" || match.startsWith("@import")
+            ? undefined
+            : namespace;
         if (/sass:(math|color|string|list|map|selector|meta)/.test(path)) {
           switch (path) {
-            case 'sass:math':
-              propertyScopedModules.push(...getSassModule('MATH', namespace));
+            case "sass:math":
+              propertyScopedModules.push(...getSassModule("MATH", namespace));
               break;
-            case 'sass:color':
-              propertyScopedModules.push(...getSassModule('COLOR', namespace));
+            case "sass:color":
+              propertyScopedModules.push(...getSassModule("COLOR", namespace));
               break;
-            case 'sass:string':
-              propertyScopedModules.push(...getSassModule('STRING', namespace));
+            case "sass:string":
+              propertyScopedModules.push(...getSassModule("STRING", namespace));
               break;
-            case 'sass:list':
-              propertyScopedModules.push(...getSassModule('LIST', namespace));
+            case "sass:list":
+              propertyScopedModules.push(...getSassModule("LIST", namespace));
               break;
-            case 'sass:map':
-              propertyScopedModules.push(...getSassModule('MAP', namespace));
+            case "sass:map":
+              propertyScopedModules.push(...getSassModule("MAP", namespace));
               break;
-            case 'sass:selector':
-              globalScopeModules.push(...getSassModule('SELECTOR', namespace));
+            case "sass:selector":
+              globalScopeModules.push(...getSassModule("SELECTOR", namespace));
               break;
-            case 'sass:meta':
+            case "sass:meta":
               // TODO
-              propertyScopedModules.push(...getSassModule('META', namespace));
+              propertyScopedModules.push(...getSassModule("META", namespace));
               break;
           }
         } else {
@@ -163,7 +223,9 @@ export class AutocompleteUtils {
           imports.push({ path, namespace });
         }
       } else if (importCssVariableRegex.test(match)) {
-        let path = match.replace(importCssVariableRegex, '').replace(replaceQuotesRegex, '$1');
+        let path = match
+          .replace(importCssVariableRegex, "")
+          .replace(replaceQuotesRegex, "$1");
 
         path = AutocompleteUtils.addDotSassToPath(path);
 
@@ -175,7 +237,7 @@ export class AutocompleteUtils {
 
   private static addDotSassToPath(path: string) {
     if (!/\.sass$/.test(path)) {
-      path = path.concat('.sass');
+      path = path.concat(".sass");
     }
     return path;
   }
@@ -185,7 +247,7 @@ export class AutocompleteUtils {
     const units = [];
 
     sassSchemaUnits.forEach((item) => {
-      const lastWord = currentword.split(' ');
+      const lastWord = currentword.split(" ");
       const rep = lastWord[lastWord.length - 1];
       const completionItem = new CompletionItem(rep + item.name);
       completionItem.insertText = new SnippetString(rep + item.body);
@@ -203,20 +265,24 @@ export class AutocompleteUtils {
   ): CompletionItem[] {
     const suggestions: CompletionItem[] = [];
     const path = normalize(
-      join(document.fileName, '../', currentWord.replace(importPathRegex, '$2').trim())
+      join(
+        document.fileName,
+        "../",
+        currentWord.replace(importPathRegex, "$2").trim()
+      )
     );
 
     const dir = readdirSync(path);
     for (const file of dir) {
       if (/.sass$/.test(file) && file !== basename(document.fileName)) {
-        const rep = file.replace('.sass', '');
+        const rep = file.replace(".sass", "");
         const item = new CompletionItem(rep);
         item.insertText = rep;
         item.detail = `Import - ${rep}`;
         item.kind = CompletionItemKind.Reference;
         item.sortText = "1";
         suggestions.push(item);
-      } else if (statSync(path + '/' + file).isDirectory()) {
+      } else if (statSync(path + "/" + file).isDirectory()) {
         const item = new CompletionItem(file);
         item.insertText = file;
         item.detail = `Folder - ${file}`;
@@ -229,17 +295,17 @@ export class AutocompleteUtils {
   }
 
   static getHtmlClassOrIdCompletions(document: TextDocument) {
-    const path = normalize(join(document.fileName, '../', './'));
+    const path = normalize(join(document.fileName, "../", "./"));
     const dir = readdirSync(path);
     const classesAndIds = this.getDocumentClassesAndIds(document);
     const res: CompletionItem[] = [];
     const addedClasses: string[] = [];
-    const regex = /class="([\w ]*)"|id="(\w*)"/g;
+    const regex = /class='([\w ]*)'|id='(\w*)'/g;
     for (const file of dir) {
-      const fileName = basename(document.fileName).replace('.sass', '.html');
+      const fileName = basename(document.fileName).replace(".sass", ".html");
       if (new RegExp(fileName).test(file)) {
         const text = readFileSync(
-          normalize(document.fileName).replace('.sass', '.html')
+          normalize(document.fileName).replace(".sass", ".html")
         ).toString();
         let m;
         while ((m = regex.exec(text)) !== null) {
@@ -249,28 +315,40 @@ export class AutocompleteUtils {
           m.forEach((match: string, groupIndex) => {
             if (groupIndex !== 0 && match !== undefined) {
               if (groupIndex === 1) {
-                const classes = match.split(' ');
+                const classes = match.split(" ");
                 classes.forEach((className) => {
                   if (
-                    classesAndIds.find((value) => value === '.'.concat(className)) === undefined
+                    classesAndIds.find(
+                      (value) => value === ".".concat(className)
+                    ) === undefined
                   ) {
-                    if (addedClasses.find((item) => className === item) === undefined) {
+                    if (
+                      addedClasses.find((item) => className === item) ===
+                      undefined
+                    ) {
                       addedClasses.push(className);
-                      const item = new CompletionItem('.'.concat(className));
+                      const item = new CompletionItem(".".concat(className));
                       item.kind = CompletionItemKind.Class;
                       item.detail = `Class From: ${fileName}`;
-                      item.insertText = new SnippetString('.'.concat(className, '\n\t$0'));
+                      item.insertText = new SnippetString(
+                        ".".concat(className, "\n\t$0")
+                      );
                       item.sortText = "7";
                       res.push(item);
                     }
                   }
                 });
               } else {
-                if (classesAndIds.find((value) => value === '#'.concat(match)) === undefined) {
-                  const item = new CompletionItem('#'.concat(match));
+                if (
+                  classesAndIds.find((value) => value === "#".concat(match)) ===
+                  undefined
+                ) {
+                  const item = new CompletionItem("#".concat(match));
                   item.kind = CompletionItemKind.Class;
                   item.detail = `Id From: ${fileName}`;
-                  item.insertText = new SnippetString('#'.concat(match, '\n\t$0'));
+                  item.insertText = new SnippetString(
+                    "#".concat(match, "\n\t$0")
+                  );
                   item.sortText = "7";
                   res.push(item);
                 }
@@ -286,7 +364,11 @@ export class AutocompleteUtils {
   static isInVueOrSvelteStyleBlock(start: Position, document: TextDocument) {
     for (let i = start.line; i > 0; i--) {
       const line = document.lineAt(i);
-      if (/^ *<[\w"'= ]*(lang|type)=['"](text\/)?sass['"][\w"'= ]*>/.test(line.text)) {
+      if (
+        /^ *<[\w''= ]*(lang|type)=['"](text\/)?sass['"][\w''= ]*>/.test(
+          line.text
+        )
+      ) {
         if (!(i === start.line)) {
           return false;
         }
@@ -301,22 +383,27 @@ export class AutocompleteUtils {
     return true;
   }
 
-  static isInMixinBlock(start: Position, document: TextDocument): CompletionItem[] | false {
+  static isInMixinBlock(
+    start: Position,
+    document: TextDocument
+  ): CompletionItem[] | false {
     for (let i = start.line; i > 0; i--) {
       const line = document.lineAt(i);
       if (/^ *@mixin/.test(line.text)) {
-        const firstSplit = line.text.split('(');
+        const firstSplit = line.text.split("(");
         if (firstSplit[1] !== undefined) {
           const resVar: CompletionItem[] = [];
-          const mixinName = firstSplit[0].replace('@mixin', '').trim();
-          firstSplit[1].split('$').forEach((variable) => {
+          const mixinName = firstSplit[0].replace("@mixin", "").trim();
+          firstSplit[1].split("$").forEach((variable) => {
             if (variable) {
-              const rep = '$'.concat(variable.split(/[,: \)]/)[0]);
+              const rep = "$".concat(variable.split(/[,: \)]/)[0]);
               const completionItem = new CompletionItem(rep);
-              completionItem.insertText = new SnippetString(rep.replace('$', '\\$'));
+              completionItem.insertText = new SnippetString(
+                rep.replace("$", "\\$")
+              );
               completionItem.detail = `@mixin ${mixinName}\n(${rep.replace(
-                '$',
-                ''
+                "$",
+                ""
               )}) - Local Variable`;
               completionItem.kind = CompletionItemKind.Variable;
               resVar.push(completionItem);
@@ -348,23 +435,23 @@ export class AutocompleteUtils {
     document: TextDocument,
     context: ExtensionContext,
     /**returning true breaks the loop. */
-    callback: (element: StateElement, namespace: string | undefined) => void | true
+    callback: (
+      element: StateElement,
+      namespace: string | undefined
+    ) => void | true
   ) {
     let breakLoop = false;
-    for (let i = 0; i < imports.length; i++) {
-      const item = imports[i];
+    for (const item of imports) {
       let importPath = item.path;
 
       const STATE: State = context.workspaceState.get(
-        normalize(join(document.fileName, '../', importPath))
+        normalize(join(document.fileName, "../", importPath))
       );
 
       if (STATE) {
         for (const key in STATE) {
           if (STATE.hasOwnProperty(key)) {
-            if (!item.cssVarsOnly) {
-              breakLoop = !!callback(STATE[key], item.namespace);
-            } else if (STATE[key].type === 'Css Variable') {
+            if (!item.cssVarsOnly || STATE[key].type === "Css Variable") {
               breakLoop = !!callback(STATE[key], item.namespace);
             }
           }
@@ -380,6 +467,6 @@ export class AutocompleteUtils {
     }
   }
   static mergeNamespace(text: string, namespace: string | undefined) {
-    return `${namespace ? namespace.concat('.') : ''}${text}`;
+    return `${namespace ? namespace.concat(".") : ""}${text}`;
   }
 }
