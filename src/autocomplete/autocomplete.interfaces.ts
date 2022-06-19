@@ -1,7 +1,7 @@
-import { MarkupContent } from "vscode-languageserver-types";
+import { MarkupContent } from 'vscode-languageserver-types';
 
 export interface BasicRawCompletion {
-  name?: string;
+  name: string;
   desc?: string;
   browsers?: string;
   body?: string;
@@ -14,10 +14,10 @@ export interface BasicRawCompletion {
 // Following types taken from https://github.com/microsoft/vscode-css-languageservice/blob/main/src/cssLanguageTypes.ts
 
 export type EntryStatus =
-  | "standard"
-  | "experimental"
-  | "nonstandard"
-  | "obsolete";
+  | 'standard'
+  | 'experimental'
+  | 'nonstandard'
+  | 'obsolete';
 
 export interface IReference {
   name: string;
