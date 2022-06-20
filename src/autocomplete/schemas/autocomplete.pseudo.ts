@@ -1,4 +1,4 @@
-import { CompletionItem, SnippetString, CompletionItemKind, workspace } from 'vscode';
+import { CompletionItem, SnippetString, CompletionItemKind } from 'vscode';
 import { BasicRawCompletion } from '../autocomplete.interfaces';
 
 const pseudoRaw: { [key: string]: BasicRawCompletion[] } = {
@@ -590,7 +590,7 @@ const pseudoRaw: { [key: string]: BasicRawCompletion[] } = {
   ]
 };
 
-export const Pseudo = [
+const pseudoClasses = [
   {
     name: ':active',
     body: ':active',
@@ -891,6 +891,9 @@ export const Pseudo = [
     body: ':visited',
     desc: 'Applies once the link has been visited by the user.'
   },
+];
+
+const pseudoElements = [
   {
     name: '::after',
     body: '::after',
@@ -934,7 +937,7 @@ export const sassPseudo = (andStared: string[]) => {
   if (!andStared) {
     andStared = [];
   }
-  const pseudo: CompletionItem[] = Pseudo.map(item => {
+  const pseudo: CompletionItem[] = pseudoElements.concat(pseudoClasses).map(item => {
     const completionItem = new CompletionItem(`${andStared.indexOf(item.name.replace(/:*\(*\)*/g, '')) !== -1 ? '*' : ''}${item.name}`);
     completionItem.insertText = new SnippetString(`${item.body}\n\t$0`);
     completionItem.detail = item.desc;

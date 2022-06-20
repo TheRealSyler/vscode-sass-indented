@@ -10,8 +10,7 @@
       "args": ["--extensionDevelopmentPath=${workspaceFolder}", "--disable-extensions"],
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/dist/"],
-      // TODO: fix watch task
-      // "preLaunchTask": "watch",
+      "preLaunchTask": "watch",
     }
   ]
 }

@@ -26,7 +26,6 @@
       "semi": "off",
       "no-unused-expressions": "warn",
       "no-duplicate-imports": "warn",
-      "new-parens": "warn",
-      "quotes": ["warn", "single"]
+      "new-parens": "warn"
   }
 }

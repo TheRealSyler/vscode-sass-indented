@@ -71,3 +71,10 @@ export interface CSSDataV1 {
   pseudoClasses?: IPseudoClassData[];
   pseudoElements?: IPseudoElementData[];
 }
+
+export type RawCssEntry =
+  | IPropertyData
+  | IAtDirectiveData
+  | IPseudoClassData
+  | IPseudoElementData
+  | IValueData;

@@ -5,12 +5,12 @@ import {
   TextDocument,
   Position,
   ExtensionContext,
+  MarkdownString,
 } from 'vscode';
-
 import sassSchemaUnits from './schemas/autocomplete.units';
 import { readdirSync, statSync, readFileSync } from 'fs';
 import { join, normalize, basename } from 'path';
-import { BasicRawCompletion, IPropertyData } from './autocomplete.interfaces';
+import { BasicRawCompletion, IPropertyData, IPseudoClassData, IPseudoElementData } from './autocomplete.interfaces';
 import { isClassOrId, isAtRule } from 'suf-regex';
 import { StateElement, State } from '../extension';
 import { getSassModule } from './schemas/autocomplete.builtInModules';
@@ -43,6 +43,9 @@ export interface ImportsItem {
 }
 
 export class AutocompleteUtils {
+  // whether to use new vscode web-custom-data for autocompletion
+  private static useNewData = true; // if set to false, will use original data
+
   /** Formats property name */
   static getPropertyName(currentWord: string): string {
     return currentWord.trim().replace(':', ' ').split(' ')[0];
@@ -53,76 +56,101 @@ export class AutocompleteUtils {
     return generatedPropertyData[property];
   }
 
-  // TODO: Cleanup getProperties, convertRawProperty, convertOptionalMarkup
-  /** Returns property list for completion */
+  static constructDescription(rawEntry: IPropertyData): string {
+    // TODO: deal with documentation, use syntax, references, browsers, etc.
+    const browsers = rawEntry.browsers?.join(',');
+    const desc = rawEntry.description ? this.convertOptionalMarkup(rawEntry.description) : '';
+    return desc;
+  }
+
+  /** Returns css property list for completion */
   static getProperties(currentWord: string): CompletionItem[] {
     if (isClassOrId(currentWord) || isAtRule(currentWord)) {
       return [];
     }
 
-    // try to use new css data source from vscode's web-custom-data
-    if (cssData.properties) {
-      return cssData.properties.map((rawProp: IPropertyData) =>
-        this.mapPropertyCompletionItem(this.convertRawProperty(rawProp)));
+    if (cssData.properties && this.useNewData) {
+      // convert rawCssEntry -> BasicRawCompletion
+      return cssData.properties.map((rawProp) => {
+        const completionItem = new CompletionItem(rawProp.name);
+        completionItem.detail = AutocompleteUtils.convertOptionalMarkup(rawProp.description);
+        completionItem.tags =
+          rawProp.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
+
+        completionItem.insertText = rawProp.name.concat(': ');
+        completionItem.kind = CompletionItemKind.Property;
+        completionItem.documentation = this.constructDescription(rawProp);
+        // use relevance for something, look at how vscode css-langauge-service does it
+        // TODO: ideally, trigger intellisense to autosuggest these values
+        const possibleValues = rawProp.values?.map((val) => {
+          return {
+            name: val.name,
+            desc: AutocompleteUtils.convertOptionalMarkup(val.description),
+            browsers: val.browsers?.join(','),
+          };
+        });
+
+        return completionItem;
+      });
     } else {
       // Fallback to old css data source
-      console.log('Using old CSS data for properties because vscode data is empty');
-      return Object.values(generatedPropertyData)
-        .map(AutocompleteUtils.mapPropertyCompletionItem);
+      console.log('Using old CSS data for properties');
+      /** Converts BasicRawCompletion -> CompletionItem */
+      function mapPropertyCompletionItem(prop: BasicRawCompletion): CompletionItem {
+        const item = new CompletionItem(prop.name);
+        item.insertText = prop.name.concat(': ');
+        item.detail = prop.desc;
+        item.tags =
+          prop.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
+        item.documentation = GetPropertyDescription(prop.name, prop);
+        item.kind = CompletionItemKind.Property;
+        item.sortText = '5'; // not sure why this is 5
+        return item;
+      }
+      return Object.values(generatedPropertyData).map(mapPropertyCompletionItem);
     }
   }
 
-  // convert IPropertyData to BasicRawCompletion
-  private static convertRawProperty(rawProp: IPropertyData): BasicRawCompletion {
-    // PROBLEM HERE
-    const convertedProp: BasicRawCompletion = {
-      name: rawProp.name,
-      desc: this.convertOptionalMarkup(rawProp.description),
-      browsers: rawProp.browsers?.join(','),
-      status: rawProp.status,
-      values: rawProp.values?.map((val) => {
-        return {
-          name: val.name,
-          desc: this.convertOptionalMarkup(val.description),
-          browsers: val.browsers?.join(','),
-        };
-      }),
-    };
-
-    const mdnUrl = rawProp.references?.find(
-      (ref) => ref.name === 'MDN Reference'
-    )?.name;
-    if (mdnUrl) {
-      convertedProp['mdn_url'] = mdnUrl;
-    }
-
-    return convertedProp;
-  }
-
-  // converts [string | MarkupContent] type to string
-  private static convertOptionalMarkup(
-    val: string | MarkupContent | undefined
-  ): string | undefined {
+  // converts [string | MarkupContent] -> string, or returns undefined
+  private static convertOptionalMarkup(val: string | MarkupContent | undefined): string | undefined {
     if (val === undefined) {
       return undefined;
-    }
-    if (typeof val === 'string') {
+    } else if (typeof val === 'string') {
       return val;
     } else {
       return val.value;
     }
   }
 
-  private static mapPropertyCompletionItem(prop: BasicRawCompletion): CompletionItem {
-    const item = new CompletionItem(prop.name);
-    item.insertText = prop.name.concat(': ');
-    item.detail = prop.desc;
-    item.tags =
-      prop.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
-    item.documentation = GetPropertyDescription(prop.name, prop);
-    item.kind = CompletionItemKind.Property;
-    item.sortText = '5';
-    return item;
+  /** Gets all CSS pseudo elements and classes completion items (not used yet) */
+  private static getCssPseudos(): CompletionItem[] {
+    let completionPseudos: CompletionItem[] = [];
+    function convertRawPseudo(rawPseudo: IPseudoClassData | IPseudoElementData): CompletionItem {
+      const completionItem = new CompletionItem(rawPseudo.name);
+      completionItem.detail = AutocompleteUtils.convertOptionalMarkup(rawPseudo.description);
+        completionItem.tags =
+        rawPseudo.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
+
+        completionItem.insertText = rawPseudo.name;
+        completionItem.kind = CompletionItemKind.Class;
+      return completionItem;
+    }
+
+    // add pseudoClasses to completion array
+    if (cssData.pseudoClasses && this.useNewData) {
+      completionPseudos.concat(cssData.pseudoClasses.map(convertRawPseudo));
+    } else {
+      // use old data source
+    }
+
+    // add pseudoElements to completion array
+    if (cssData.pseudoElements && this.useNewData) {
+      completionPseudos.concat(cssData.pseudoElements.map(convertRawPseudo));
+    } else {
+      // use old data source
+    }
+
+    return completionPseudos;
   }
 
   static getHtmlElements(currentWord: string): CompletionItem[] {
