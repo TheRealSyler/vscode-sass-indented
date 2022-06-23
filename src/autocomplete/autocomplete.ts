@@ -54,14 +54,14 @@ class SassCompletion implements CompletionItemProvider {
     const disableUnitCompletion: boolean = config.get('sass.disableUnitCompletion');
     let block = false;
     let isInMixinBlock: CompletionItem[] | false = false;
-    let atRules = [];
-    let Units = [];
-    let properties = [];
-    let values = [];
-    let classesAndIds = [];
-    let functions = [];
+    let atRules: CompletionItem[] = [];
+    let Units: CompletionItem[] = [];
+    let properties: CompletionItem[] = [];
+    let values: CompletionItem[] = [];
+    let classesAndIds: CompletionItem[] = [];
+    let functions: CompletionItem[] = [];
     let variables: CompletionItem[] = [];
-    let htmlElements = [];
+    let htmlElements: CompletionItem[] = [];
 
     let completions: CompletionItem[] = [];
     if (document.languageId === 'vue' || document.languageId === 'svelte') {

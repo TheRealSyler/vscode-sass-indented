@@ -2,16 +2,18 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------
- * File from https://github.com/microsoft/vscode-css-languageservice/blob/main/build/generateData.js
+ * File originally from https://github.com/microsoft/vscode-css-languageservice/blob/main/build/generateData.js,
+ * converted to typescript.
  */
 
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
 
-const customData = require('@vscode/web-custom-data/data/browsers.css-data.json');
+import customData from '@vscode/web-custom-data/data/browsers.css-data.json';
+import { CSSDataV1 } from '../autocomplete/autocomplete.interfaces';
 
-function toJavaScript(obj) {
+function toJsonString(obj: CSSDataV1) {
 	return JSON.stringify(obj, null, '\t');
 }
 
@@ -23,12 +25,12 @@ const output = [
 	' *--------------------------------------------------------------------------------------------*/',
 	'// file generated from @vscode/web-custom-data NPM package',
 	'',
-	`import { ${DATA_TYPE} } from '../cssLanguageTypes';`,
+	`import { CSSDataV1 } from '../../autocomplete.interfaces';`,
 	'',
-	`export const cssData : ${DATA_TYPE} = ` + toJavaScript(customData) + ';'
+	`export const cssData : ${DATA_TYPE} = ` + toJsonString(customData as CSSDataV1) + ';'
 ];
 
-var outputPath = path.resolve(__dirname, '../src/autocomplete/schemas/generatedData/rawCssData.ts');
+var outputPath = path.resolve(__dirname, '../autocomplete/schemas/generatedData/rawCssData.ts');
 console.log('Writing to: ' + outputPath);
 var content = output.join(os.EOL);
 fs.writeFileSync(outputPath, content);

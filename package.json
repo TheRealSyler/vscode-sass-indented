@@ -12,7 +12,7 @@
     "watch": "webpack --mode development",
     "test": "ts-node src/test/test.ts",
     "test:watch": "nodemon src/test/test.ts -- DEV_MODE",
-    "update-css": "yarn add @vscode/web-custom-data -D && node ./scripts/generateCssData.js"
+    "update-css": "yarn add @vscode/web-custom-data -D && ts-node ./src/scripts/generateCssData.ts"
   },
   "private": true,
   "repository": {

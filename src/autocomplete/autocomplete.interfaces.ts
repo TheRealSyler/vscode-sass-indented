@@ -64,12 +64,16 @@ export interface IValueData {
   references?: IReference[];
 }
 
-export interface CSSDataV1 {
-  version: 1 | 1.1;
+export interface CSSData {
+  version: number;
   properties?: IPropertyData[];
   atDirectives?: IAtDirectiveData[];
   pseudoClasses?: IPseudoClassData[];
   pseudoElements?: IPseudoElementData[];
+}
+
+export interface CSSDataV1 extends CSSData {
+  version: 1 | 1.1
 }
 
 export type RawCssEntry =

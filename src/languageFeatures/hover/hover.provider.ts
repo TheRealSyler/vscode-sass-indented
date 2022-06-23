@@ -11,7 +11,6 @@ import {
 
 import { AutocompleteUtils } from '../../autocomplete/autocomplete.utility';
 import { isProperty, isVar } from 'suf-regex';
-import { GetPropertyDescription } from '../../utilityFunctions';
 import { basename } from 'path';
 import { Searcher } from '../../autocomplete/search/autocomplete.search';
 
@@ -43,7 +42,7 @@ export class SassHoverProvider implements HoverProvider {
           return {
             contents: [
               `\`\`\`sass.hover\n${name}: CSS property\n\`\`\``,
-              `${GetPropertyDescription(name, propData, true)}`,
+              `${AutocompleteUtils.constructDocumentation(propData)}`,
             ],
           };
         }

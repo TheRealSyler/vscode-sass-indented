@@ -10,11 +10,10 @@ import {
 import sassSchemaUnits from './schemas/autocomplete.units';
 import { readdirSync, statSync, readFileSync } from 'fs';
 import { join, normalize, basename } from 'path';
-import { BasicRawCompletion, IPropertyData, IPseudoClassData, IPseudoElementData } from './autocomplete.interfaces';
+import { EntryStatus, IPropertyData, IPseudoClassData, IPseudoElementData, IReference, IValueData } from './autocomplete.interfaces';
 import { isClassOrId, isAtRule } from 'suf-regex';
 import { StateElement, State } from '../extension';
 import { getSassModule } from './schemas/autocomplete.builtInModules';
-import { generatedPropertyData } from './schemas/autocomplete.generatedData';
 import {
   positionValues,
   lineStyleValues,
@@ -22,7 +21,6 @@ import {
   repeatValues,
 } from './schemas/autocomplete.valueGroups';
 import { htmlTags } from './schemas/autocomplete.html';
-import { GetPropertyDescription } from '../utilityFunctions';
 import { cssData } from './schemas/generatedData/rawCssData';
 import { CompletionItemTag, MarkupContent } from 'vscode-languageserver-types';
 
@@ -42,9 +40,10 @@ export interface ImportsItem {
   cssVarsOnly?: boolean;
 }
 
+// markdown line break constant
+export const mdLineBreak = '  \n';
+
 export class AutocompleteUtils {
-  // whether to use new vscode web-custom-data for autocompletion
-  private static useNewData = true; // if set to false, will use original data
 
   /** Formats property name */
   static getPropertyName(currentWord: string): string {
@@ -52,63 +51,91 @@ export class AutocompleteUtils {
   }
 
   /** Search for property in cssSchema */
-  static findPropertySchema(property: string): BasicRawCompletion {
-    return generatedPropertyData[property];
+  static findPropertySchema(property: string): IPropertyData {
+    return cssData.properties[property];
   }
 
-  static constructDescription(rawEntry: IPropertyData): string {
-    // TODO: deal with documentation, use syntax, references, browsers, etc.
-    const browsers = rawEntry.browsers?.join(',');
-    const desc = rawEntry.description ? this.convertOptionalMarkup(rawEntry.description) : '';
-    return desc;
+  static constructDocumentation(rawEntry: IPropertyData): string {
+    const formattedStatus = function(status?: EntryStatus): string {
+      switch (status) {
+        case 'nonstandard':
+          return '⚠️ **Attention** this Property is **`nonStandard`**.\n';
+        case 'experimental':
+          return '⚠️ **Attention** this Property is **`Experimental`**.\n';
+        case 'obsolete':
+          return '⛔️ **Attention** this Property is **`Obsolete`**.\n';
+        default:
+          // Treat undefined status the same as 'standard', no comment
+          return '';
+      }
+    }(rawEntry.status);
+
+    const formattedDescription = rawEntry.description ? `\n${rawEntry.description}` : '';
+
+    const formattedRefs = function(refs: IReference[] = []): string {
+      // add google search to references
+      const allRefs = refs.concat({
+        name: 'Google',
+        url: `https://www.google.com/search?q=css+${rawEntry.name}`
+      });
+
+      return (
+        '\n\n'
+        + allRefs.map(ref => `[${ref.name}](${ref.url})`).join(mdLineBreak)
+      );
+
+    }(rawEntry.references);
+
+    const formattedValues = function(values: IValueData[] = []): string {
+      if (values.length === 0) {
+        return '';
+      }
+
+      let text = '\n\n**Values**';
+      for (let i = 0; i < values.length; i++) {
+        const value = values[i];
+        text = text.concat(
+          '\n- ',
+          value.name ? '**`' + value.name + '`**' : '',
+          value.description ? ' *' + value.description + '*' : ''
+        );
+      }
+      return text;
+    }(rawEntry.values);
+
+    // unused fields of rawEntry: browsers, restrictions, syntax, relevance
+    // could be used in future
+
+    const documentation = (
+      formattedStatus
+      + formattedDescription
+      + formattedRefs
+      + formattedValues
+    );
+
+    return documentation;
   }
 
   /** Returns css property list for completion */
   static getProperties(currentWord: string): CompletionItem[] {
-    if (isClassOrId(currentWord) || isAtRule(currentWord)) {
+    if (isClassOrId(currentWord) || isAtRule(currentWord) || !cssData.properties) {
       return [];
     }
 
-    if (cssData.properties && this.useNewData) {
-      // convert rawCssEntry -> BasicRawCompletion
-      return cssData.properties.map((rawProp) => {
-        const completionItem = new CompletionItem(rawProp.name);
-        completionItem.detail = AutocompleteUtils.convertOptionalMarkup(rawProp.description);
-        completionItem.tags =
-          rawProp.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
+    return cssData.properties.map((rawProp) => {
+      const completionItem = new CompletionItem(rawProp.name);
+      completionItem.detail = AutocompleteUtils.convertOptionalMarkup(rawProp.description);
+      completionItem.tags =
+        rawProp.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
+      completionItem.sortText = '5';
 
-        completionItem.insertText = rawProp.name.concat(': ');
-        completionItem.kind = CompletionItemKind.Property;
-        completionItem.documentation = this.constructDescription(rawProp);
-        // use relevance for something, look at how vscode css-langauge-service does it
-        // TODO: ideally, trigger intellisense to autosuggest these values
-        const possibleValues = rawProp.values?.map((val) => {
-          return {
-            name: val.name,
-            desc: AutocompleteUtils.convertOptionalMarkup(val.description),
-            browsers: val.browsers?.join(','),
-          };
-        });
+      completionItem.insertText = rawProp.name.concat(': ');
+      completionItem.kind = CompletionItemKind.Property;
+      completionItem.documentation = new MarkdownString(this.constructDocumentation(rawProp));
+      // TODO: ideally, trigger intellisense to autosuggest possible values of property
 
-        return completionItem;
-      });
-    } else {
-      // Fallback to old css data source
-      console.log('Using old CSS data for properties');
-      /** Converts BasicRawCompletion -> CompletionItem */
-      function mapPropertyCompletionItem(prop: BasicRawCompletion): CompletionItem {
-        const item = new CompletionItem(prop.name);
-        item.insertText = prop.name.concat(': ');
-        item.detail = prop.desc;
-        item.tags =
-          prop.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
-        item.documentation = GetPropertyDescription(prop.name, prop);
-        item.kind = CompletionItemKind.Property;
-        item.sortText = '5'; // not sure why this is 5
-        return item;
-      }
-      return Object.values(generatedPropertyData).map(mapPropertyCompletionItem);
-    }
+      return completionItem;
+    });
   }
 
   // converts [string | MarkupContent] -> string, or returns undefined
@@ -128,26 +155,22 @@ export class AutocompleteUtils {
     function convertRawPseudo(rawPseudo: IPseudoClassData | IPseudoElementData): CompletionItem {
       const completionItem = new CompletionItem(rawPseudo.name);
       completionItem.detail = AutocompleteUtils.convertOptionalMarkup(rawPseudo.description);
-        completionItem.tags =
+      completionItem.tags =
         rawPseudo.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
-
-        completionItem.insertText = rawPseudo.name;
-        completionItem.kind = CompletionItemKind.Class;
+      completionItem.documentation = AutocompleteUtils.constructDocumentation(rawPseudo);
+      completionItem.insertText = rawPseudo.name;
+      completionItem.kind = CompletionItemKind.Class;
       return completionItem;
     }
 
     // add pseudoClasses to completion array
-    if (cssData.pseudoClasses && this.useNewData) {
+    if (cssData.pseudoClasses) {
       completionPseudos.concat(cssData.pseudoClasses.map(convertRawPseudo));
-    } else {
-      // use old data source
     }
 
     // add pseudoElements to completion array
-    if (cssData.pseudoElements && this.useNewData) {
+    if (cssData.pseudoElements) {
       completionPseudos.concat(cssData.pseudoElements.map(convertRawPseudo));
-    } else {
-      // use old data source
     }
 
     return completionPseudos;
@@ -179,8 +202,8 @@ export class AutocompleteUtils {
       values.push(...schema.values);
     }
 
-    if (schema.restriction) {
-      const restrictions = schema.restriction.split(', ');
+    if (schema.restrictions) {
+      const restrictions = schema.restrictions;
       if (restrictions.includes('position')) {
         values.push(...positionValues);
       }
