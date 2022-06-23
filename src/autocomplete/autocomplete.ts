@@ -28,6 +28,7 @@ import {
   AutocompleteUtils as Utility,
   ImportsItem,
   importCssVariableRegex,
+  AutocompleteUtils,
 } from './autocomplete.utility';
 import { Searcher } from './search/autocomplete.search';
 import { sassCommentCompletions } from './schemas/autocomplete.commentCompletions';
@@ -84,7 +85,7 @@ class SassCompletion implements CompletionItemProvider {
     }
 
     if (!block && currentWord.startsWith('&')) {
-      completions = sassPseudo(config.get('sass.andStared'));
+      completions = AutocompleteUtils.getCssPseudos();
       block = true;
     }
 
@@ -165,6 +166,7 @@ class SassCompletion implements CompletionItemProvider {
       );
     }
 
+    // console.log({ completions });
     return completions;
   }
 

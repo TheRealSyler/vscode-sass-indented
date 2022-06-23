@@ -6,11 +6,12 @@ import {
   Position,
   ExtensionContext,
   MarkdownString,
+  workspace,
 } from 'vscode';
 import sassSchemaUnits from './schemas/autocomplete.units';
 import { readdirSync, statSync, readFileSync } from 'fs';
 import { join, normalize, basename } from 'path';
-import { EntryStatus, IPropertyData, IPseudoClassData, IPseudoElementData, IReference, IValueData } from './autocomplete.interfaces';
+import { EntityStatus, IPropertyData, IPseudoClassData, IPseudoElementData, IReference, IValueData, NonPropertyEntity, RawCssEntity } from './autocomplete.interfaces';
 import { isClassOrId, isAtRule } from 'suf-regex';
 import { StateElement, State } from '../extension';
 import { getSassModule } from './schemas/autocomplete.builtInModules';
@@ -55,8 +56,11 @@ export class AutocompleteUtils {
     return cssData.properties[property];
   }
 
-  static constructDocumentation(rawEntry: IPropertyData): string {
-    const formattedStatus = function(status?: EntryStatus): string {
+  /** Creates the documentation for a css entity.
+   *  Returns a string with markdown formatting.
+   */
+  static constructDocumentation(rawEntity: RawCssEntity): string {
+    const formattedStatus = function(status?: EntityStatus): string {
       switch (status) {
         case 'nonstandard':
           return '⚠️ **Attention** this Property is **`nonStandard`**.\n';
@@ -65,18 +69,18 @@ export class AutocompleteUtils {
         case 'obsolete':
           return '⛔️ **Attention** this Property is **`Obsolete`**.\n';
         default:
-          // Treat undefined status the same as 'standard', no comment
+          // Treat undefined status the same as 'standard', no special comment
           return '';
       }
-    }(rawEntry.status);
+    }(rawEntity.status);
 
-    const formattedDescription = rawEntry.description ? `\n${rawEntry.description}` : '';
+    const formattedDescription = rawEntity.description ? `\n${rawEntity.description}` : '';
 
     const formattedRefs = function(refs: IReference[] = []): string {
       // add google search to references
       const allRefs = refs.concat({
         name: 'Google',
-        url: `https://www.google.com/search?q=css+${rawEntry.name}`
+        url: `https://www.google.com/search?q=css+${rawEntity.name}`
       });
 
       return (
@@ -84,8 +88,9 @@ export class AutocompleteUtils {
         + allRefs.map(ref => `[${ref.name}](${ref.url})`).join(mdLineBreak)
       );
 
-    }(rawEntry.references);
+    }(rawEntity.references);
 
+    // the following formatted fields should only be in IPropertyData (currently only formattedValues)
     const formattedValues = function(values: IValueData[] = []): string {
       if (values.length === 0) {
         return '';
@@ -101,9 +106,9 @@ export class AutocompleteUtils {
         );
       }
       return text;
-    }(rawEntry.values);
+    }("values" in rawEntity ? rawEntity.values : undefined);
 
-    // unused fields of rawEntry: browsers, restrictions, syntax, relevance
+    // unused fields of rawEntity: browsers, restrictions, syntax, relevance
     // could be used in future
 
     const documentation = (
@@ -114,6 +119,24 @@ export class AutocompleteUtils {
     );
 
     return documentation;
+  }
+
+  /** Constructs the snippet string to be used as the CompletionItem's insertText
+   *  for entities that could be functions.
+   *  Assumes that the parentheses are in the names if the enttity is indeed a function.
+   */
+  static getInsertText({ name }: NonPropertyEntity): SnippetString {
+    let snipString: string;
+    const functionRegex = /(?<funcName>.*)\((?<argName>.*)\)$/;
+    const matchedGroups = functionRegex.exec(name)?.groups;
+    if (matchedGroups) {
+      const {funcName, argName} = matchedGroups;
+      snipString = `${funcName}($\{1:${argName}\})`;
+    } else {
+      snipString = name;
+    }
+
+    return new SnippetString(`${snipString}\n\t$0`);
   }
 
   /** Returns css property list for completion */
@@ -138,7 +161,7 @@ export class AutocompleteUtils {
     });
   }
 
-  // converts [string | MarkupContent] -> string, or returns undefined
+  /** Converts [string | MarkupContent] -> string, or returns undefined */
   private static convertOptionalMarkup(val: string | MarkupContent | undefined): string | undefined {
     if (val === undefined) {
       return undefined;
@@ -149,29 +172,37 @@ export class AutocompleteUtils {
     }
   }
 
-  /** Gets all CSS pseudo elements and classes completion items (not used yet) */
-  private static getCssPseudos(): CompletionItem[] {
-    let completionPseudos: CompletionItem[] = [];
+  /** Gets all CSS pseudo elements and classes completion items */
+  static getCssPseudos(): CompletionItem[] {
+    const completionPseudos: CompletionItem[] = [];
     function convertRawPseudo(rawPseudo: IPseudoClassData | IPseudoElementData): CompletionItem {
-      const completionItem = new CompletionItem(rawPseudo.name);
+      // appends a star to the front of the pseudo's name if it is starred in the settings
+      const starredEntities: string[] | undefined = workspace.getConfiguration().get('sass.andStared');
+      const pseudoBareName = rawPseudo.name.replace(/:*\(*\)*/g, '');
+      let itemName: string;
+      if (starredEntities?.includes(pseudoBareName)) {
+        itemName = '*'.concat(rawPseudo.name);
+      } else {
+        itemName = rawPseudo.name;
+      }
+
+      const completionItem = new CompletionItem(itemName);
       completionItem.detail = AutocompleteUtils.convertOptionalMarkup(rawPseudo.description);
       completionItem.tags =
         rawPseudo.status === 'obsolete' ? [CompletionItemTag.Deprecated] : [];
-      completionItem.documentation = AutocompleteUtils.constructDocumentation(rawPseudo);
-      completionItem.insertText = rawPseudo.name;
+      const docs = new MarkdownString(AutocompleteUtils.constructDocumentation(rawPseudo));
+      // console.log(AutocompleteUtils.constructDocumentation(rawPseudo));
+      completionItem.documentation = docs;
+      completionItem.insertText = AutocompleteUtils.getInsertText(rawPseudo);
       completionItem.kind = CompletionItemKind.Class;
+
       return completionItem;
     }
 
     // add pseudoClasses to completion array
-    if (cssData.pseudoClasses) {
-      completionPseudos.concat(cssData.pseudoClasses.map(convertRawPseudo));
-    }
-
+    completionPseudos.push(...cssData.pseudoClasses?.map(convertRawPseudo) ?? []);
     // add pseudoElements to completion array
-    if (cssData.pseudoElements) {
-      completionPseudos.concat(cssData.pseudoElements.map(convertRawPseudo));
-    }
+    completionPseudos.push(...cssData.pseudoElements?.map(convertRawPseudo) ?? []);
 
     return completionPseudos;
   }

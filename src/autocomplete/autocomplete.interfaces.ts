@@ -13,7 +13,7 @@ export interface BasicRawCompletion {
 
 // Following types taken from https://github.com/microsoft/vscode-css-languageservice/blob/main/src/cssLanguageTypes.ts
 
-export type EntryStatus =
+export type EntityStatus =
   | 'standard'
   | 'experimental'
   | 'nonstandard'
@@ -28,7 +28,7 @@ export interface IPropertyData {
   description?: string | MarkupContent;
   browsers?: string[];
   restrictions?: string[];
-  status?: EntryStatus;
+  status?: EntityStatus;
   syntax?: string;
   values?: IValueData[];
   references?: IReference[];
@@ -38,21 +38,21 @@ export interface IAtDirectiveData {
   name: string;
   description?: string | MarkupContent;
   browsers?: string[];
-  status?: EntryStatus;
+  status?: EntityStatus;
   references?: IReference[];
 }
 export interface IPseudoClassData {
   name: string;
   description?: string | MarkupContent;
   browsers?: string[];
-  status?: EntryStatus;
+  status?: EntityStatus;
   references?: IReference[];
 }
 export interface IPseudoElementData {
   name: string;
   description?: string | MarkupContent;
   browsers?: string[];
-  status?: EntryStatus;
+  status?: EntityStatus;
   references?: IReference[];
 }
 
@@ -60,7 +60,7 @@ export interface IValueData {
   name: string;
   description?: string | MarkupContent;
   browsers?: string[];
-  status?: EntryStatus;
+  status?: EntityStatus;
   references?: IReference[];
 }
 
@@ -76,7 +76,14 @@ export interface CSSDataV1 extends CSSData {
   version: 1 | 1.1
 }
 
-export type RawCssEntry =
+
+export type NonPropertyEntity =
+  | IAtDirectiveData
+  | IPseudoClassData
+  | IPseudoElementData
+  | IValueData;
+
+export type RawCssEntity =
   | IPropertyData
   | IAtDirectiveData
   | IPseudoClassData
