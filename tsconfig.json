@@ -3,12 +3,13 @@
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
-    "lib": ["es6"],
+    "lib": ["es6", "ES2018"],
     "sourceMap": true,
     "rootDir": "src",
     /* Strict Type-Checking Option */
     "strict": false /* enable all strict type-checking options */,
     /* Additional Checks */
+    "resolveJsonModule": true, // allows json imports, used to import vscode's web-custom-data
     "esModuleInterop": true,
     "noUnusedLocals": false /* Report errors on unused locals. */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */

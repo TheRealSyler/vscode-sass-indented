@@ -7,11 +7,10 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--disable-extensions"],
-      "stopOnEntry": false,
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}", "--disable-extensions"],
       "sourceMaps": true,
-      "outFiles": ["${workspaceRoot}/out/"],
-      "preLaunchTask": "watch"
+      "outFiles": ["${workspaceFolder}/dist/"],
+      "preLaunchTask": "watch",
     }
   ]
 }

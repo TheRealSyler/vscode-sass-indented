@@ -7,6 +7,11 @@ export const sassAtArr = [
     desc: 'Prints the value to the standard error output stream',
   },
   {
+    name: '@warn',
+    body: '@warn ',
+    desc: 'Prints the value to the standard error output stream',
+  },
+  {
     name: '@error',
     body: '@error ',
     desc: 'Throws the value as a fatal error',
@@ -15,11 +20,6 @@ export const sassAtArr = [
     name: '@extend',
     body: '@extend ',
     desc: 'Inherit the styles of another selector',
-  },
-  {
-    name: '@warn',
-    body: '@warn ',
-    desc: 'Prints the value to the standard error output stream',
   },
   {
     name: '@at-root',
@@ -49,17 +49,20 @@ export const sassAtArr = [
   {
     name: '@import',
     body: '@import ${1:filePath}',
-    desc: 'Includes content of another file, will be depreciated in the future use @use instead. ',
+    desc: 'Includes content of another file, will be depreciated in the future use @use if possible. ',
   },
   {
     name: '@use',
     body:
-      "@use ${1|.,'sass:math','sass:color','sass:string','sass:list','sass:map','sass:selector','sass:meta'|}",
-    desc: `Includes content of another file or loads a built in module.
+      "@use ${1|'filepath','sass:math','sass:color','sass:string','sass:list','sass:map','sass:selector','sass:meta'|}",
+    desc: `Includes content of another file or loads a built-in module.
 
-Note: Only Dart Sass currently supports loading built-in modules with @use. Users of other implementations must call functions using their global names instead.
-
-November 2019, this will change in the future check the sass-lang.com website for more up to Date info`,
+Note: Only Dart Sass currently supports @use. Users of other implementations should migrate or use @import instead.`,
+  },
+  {
+    name: '@forward',
+    body: "@forward '${1:filepath}'",
+    desc: 'Exports a module without making it available in the current file',
   },
   {
     name: '@media',
@@ -68,9 +71,19 @@ November 2019, this will change in the future check the sass-lang.com website fo
     desc: '@media',
   },
   {
+    name: '@function',
+    body: '@function ${1:name}($2)\n\t$3\n\t@return ${4:value}',
+    desc: 'Creates a Sass function'
+  },
+  {
     name: '@mixin',
     body: '@mixin ${1:name}($2)\n\t$0',
     desc: 'Create a new mixin',
+  },
+  {
+    name: '@include',
+    body: '@include ${1:mixin-name}',
+    desc: 'Includes a mixin into the current context',
   },
   {
     name: '@keyframes',

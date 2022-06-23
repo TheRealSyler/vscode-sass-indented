@@ -6,7 +6,6 @@
   Original stylus version: https://github.com/d4rkr00t/language-stylus
 */
 import {
-  CancellationToken,
   CompletionItem,
   CompletionItemProvider,
   Position,
@@ -23,12 +22,12 @@ import {
 import sassSchema from './schemas/autocomplete.schema';
 
 import { sassAt } from './schemas/autocomplete.at';
-import { sassPseudo } from './schemas/autocomplete.pseudo';
 import { isNumber } from 'util';
 import {
   AutocompleteUtils as Utility,
   ImportsItem,
   importCssVariableRegex,
+  AutocompleteUtils,
 } from './autocomplete.utility';
 import { Searcher } from './search/autocomplete.search';
 import { sassCommentCompletions } from './schemas/autocomplete.commentCompletions';
@@ -44,8 +43,7 @@ class SassCompletion implements CompletionItemProvider {
   }
   provideCompletionItems(
     document: TextDocument,
-    position: Position,
-    token: CancellationToken
+    position: Position
   ): CompletionItem[] {
     const start = new Position(position.line, 0);
     const range = new Range(start, position);
@@ -56,14 +54,14 @@ class SassCompletion implements CompletionItemProvider {
     const disableUnitCompletion: boolean = config.get('sass.disableUnitCompletion');
     let block = false;
     let isInMixinBlock: CompletionItem[] | false = false;
-    let atRules = [];
-    let Units = [];
-    let properties = [];
-    let values = [];
-    let classesAndIds = [];
-    let functions = [];
+    let atRules: CompletionItem[] = [];
+    let Units: CompletionItem[] = [];
+    let properties: CompletionItem[] = [];
+    let values: CompletionItem[] = [];
+    let classesAndIds: CompletionItem[] = [];
+    let functions: CompletionItem[] = [];
     let variables: CompletionItem[] = [];
-    let htmlElements = [];
+    let htmlElements: CompletionItem[] = [];
 
     let completions: CompletionItem[] = [];
     if (document.languageId === 'vue' || document.languageId === 'svelte') {
@@ -86,7 +84,7 @@ class SassCompletion implements CompletionItemProvider {
     }
 
     if (!block && currentWord.startsWith('&')) {
-      completions = sassPseudo(config.get('sass.andStared'));
+      completions = AutocompleteUtils.getCssPseudos();
       block = true;
     }
 
