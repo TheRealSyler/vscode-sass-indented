@@ -52,8 +52,8 @@ export class AutocompleteUtils {
   }
 
   /** Search for property in cssSchema */
-  static findPropertySchema(property: string): IPropertyData {
-    return cssData.properties[property];
+  static findPropertySchema(property: string) {
+    return cssData.properties.find(prop => prop.name === property);
   }
 
   /** Creates the documentation for a css entity.
