@@ -7,7 +7,7 @@
   "publisher": "syler",
   "scripts": {
     "pre:distribute": "yarn test && yarn build",
-    "distribute": "ts-node ./src/distribute.ts",
+    "distribute": "ts-node ./src/scripts/distribute.ts",
     "build": "tsc -b && suf b && webpack --mode production",
     "watch": "webpack --mode development",
     "test": "ts-node src/test/test.ts",

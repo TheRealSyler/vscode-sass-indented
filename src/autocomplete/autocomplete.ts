@@ -22,7 +22,6 @@ import {
 import sassSchema from './schemas/autocomplete.schema';
 
 import { sassAt } from './schemas/autocomplete.at';
-import { sassPseudo } from './schemas/autocomplete.pseudo';
 import { isNumber } from 'util';
 import {
   AutocompleteUtils as Utility,
