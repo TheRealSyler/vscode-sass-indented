@@ -25,7 +25,7 @@ const output = [
 	' *--------------------------------------------------------------------------------------------*/',
 	'// file generated from @vscode/web-custom-data NPM package',
 	'',
-	`import { CSSDataV1 } from '../../autocomplete.interfaces';`,
+	`import { ${DATA_TYPE} } from '../../autocomplete.interfaces';`,
 	'',
 	`export const cssData : ${DATA_TYPE} = ` + toJsonString(customData as CSSDataV1) + ';'
 ];

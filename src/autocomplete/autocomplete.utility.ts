@@ -123,7 +123,7 @@ export class AutocompleteUtils {
 
   /** Constructs the snippet string to be used as the CompletionItem's insertText
    *  for entities that could be functions.
-   *  Assumes that the parentheses are in the names if the enttity is indeed a function.
+   *  Assumes that the parentheses are in the names if the entity is indeed a function.
    */
   static getInsertText({ name }: NonPropertyEntity): SnippetString {
     let snipString: string;
@@ -155,7 +155,6 @@ export class AutocompleteUtils {
       completionItem.insertText = rawProp.name.concat(': ');
       completionItem.kind = CompletionItemKind.Property;
       completionItem.documentation = new MarkdownString(this.constructDocumentation(rawProp));
-      // TODO: ideally, trigger intellisense to autosuggest possible values of property
 
       return completionItem;
     });

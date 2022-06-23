@@ -165,7 +165,6 @@ class SassCompletion implements CompletionItemProvider {
       );
     }
 
-    // console.log({ completions });
     return completions;
   }
 
