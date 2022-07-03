@@ -293,7 +293,7 @@
       ]
     },
     {
-      "match": "^(?<=\\]|\\)|not\\(|\\*|>|>\\s|\n*):[a-z:-]+|(::|:-)[a-z:-]+",
+      "match": "^((?<=\\]|\\)|not\\(|\\*|>|>\\s)|\n*):[a-z:-]+|(::|:-)[a-z:-]+",
       "name": "entity.other.attribute-name.pseudo-class.css.sass"
     },
     {
