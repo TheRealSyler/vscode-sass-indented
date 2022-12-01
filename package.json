@@ -2,7 +2,7 @@
   "name": "sass-indented",
   "displayName": "Sass",
   "description": "Indented Sass syntax Highlighting, Autocomplete & Formatter",
-  "version": "1.8.22",
+  "version": "1.8.23",
   "icon": "resources/images/sass-logo-seal.png",
   "publisher": "syler",
   "scripts": {
@@ -149,7 +149,7 @@
     "@types/vscode": "^1.48.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
-    "@vscode/web-custom-data": "^0.4.0",
+    "@vscode/web-custom-data": "^0.4.4",
     "dotenv": "^8.2.0",
     "eslint": "^8.18.0",
     "nodemon": "^2.0.16",

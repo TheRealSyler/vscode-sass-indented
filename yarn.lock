@@ -335,10 +335,10 @@
     "@typescript-eslint/types" "5.28.0"
     eslint-visitor-keys "^3.3.0"
 
-"@vscode/web-custom-data@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@vscode/web-custom-data/-/web-custom-data-0.4.0.tgz#27fe11e8a18d6d94e891bf43d6409e7a452bc48e"
-  integrity sha512-I9s7+c+YTfQjaeOEC9lcDPH6B85fsxnuQKiGcmDRhvd/1jAyp8z8ZeFO9RrDCjZWTrqdLrBKkwhgXZL9ank5Sg==
+"@vscode/web-custom-data@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@vscode/web-custom-data/-/web-custom-data-0.4.4.tgz#1a8ee643c8ed238d3fc8ecf78b647dc16f639e17"
+  integrity sha512-wg8DEYPrNhUozC+FVuuqWP2ySjmuyX+5hP0qoXY/H12UYeGy9z1SqOSmOX4e7XFKGyK5a4xIhmEWU9jgPPTAHg==
 
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
