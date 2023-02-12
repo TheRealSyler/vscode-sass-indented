@@ -2,7 +2,8 @@
 
 | Version | Date       | Changelog                                                                                                                                       |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1.8.22   | 03.07.2022  | fix [sass-formatter #64](https://github.com/TheRealSyler/sass-formatter/issues/64)                                                                                                                         |
+| 1.8.23   | 12.02.2023  | update sass-formatter                                                                                                                         |
+| 1.8.22   | 03.07.2022  | fix [sass-formatter #64](https://github.com/TheRealSyler/sass-formatter/issues/64)                                                            |
 | 1.8.21   | 23.06.2022  | update data, by [@Mitchman215](https://github.com/Mitchman215) [#99](https://github.com/TheRealSyler/vscode-sass-indented/pull/99)                                                                                                                         |
 | 1.8.20   | 28.05.2022  | update sass-formatter                                                                                                                         |
 | 1.8.19   | 12.02.2022  | update readme                                                                                                                                 |
