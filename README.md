@@ -5,6 +5,8 @@
 [![Tested With](https://img.shields.io/badge/Syntax Tested With-test--grammar-red?style=for-the-badge)](https://www.npmjs.com/package/test-grammar)
 [![Using](https://img.shields.io/badge/Using-sass--formatter-red?style=for-the-badge)](https://www.npmjs.com/package/sass-formatter)
 
+> This extension is for only for `.sass` files, `.scss` support is built into vscode by default. 
+
 # _Indented Sass syntax highlighting, autocomplete & Formatter for VSCode_
 
 ## **_Installing_**

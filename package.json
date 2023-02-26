@@ -1,8 +1,8 @@
 {
   "name": "sass-indented",
-  "displayName": "Sass",
+  "displayName": "Sass (.sass only)",
   "description": "Indented Sass syntax Highlighting, Autocomplete & Formatter",
-  "version": "1.8.24",
+  "version": "1.8.25",
   "icon": "resources/images/sass-logo-seal.png",
   "publisher": "syler",
   "scripts": {
