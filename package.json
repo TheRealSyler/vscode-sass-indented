@@ -48,6 +48,11 @@
           "default": true,
           "description": "adds units to the intellisense completions if false."
         },
+        "sass.disableCommentCompletion": {
+          "type": "boolean",
+          "default": false,
+          "description": "adds magic comments to the intellisense completions if false."
+        },
         "sass.format.enabled": {
           "type": "boolean",
           "default": true,
