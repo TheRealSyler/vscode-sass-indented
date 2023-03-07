@@ -52,6 +52,7 @@ class SassCompletion implements CompletionItemProvider {
 
     const config = workspace.getConfiguration();
     const disableUnitCompletion: boolean = config.get('sass.disableUnitCompletion');
+    const disableCommentCompletion: boolean = config.get('sass.disableCommentCompletion');
     let block = false;
     let isInMixinBlock: CompletionItem[] | false = false;
     let atRules: CompletionItem[] = [];
@@ -95,7 +96,7 @@ class SassCompletion implements CompletionItemProvider {
     if (!block && currentWord.startsWith('/')) {
       if (importCssVariableRegex.test(currentWord)) {
         completions = Utility.getImportSuggestionsForCurrentWord(document, currentWord);
-      } else {
+      } else if (!disableCommentCompletion) {
         completions = sassCommentCompletions();
       }
       block = true;
