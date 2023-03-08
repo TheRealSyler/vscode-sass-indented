@@ -2,6 +2,7 @@
 
 | Version | Date       | Changelog                                                                                                                                       |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.8.26   | 08.03.2023  | Add disable comment completion option, by   [@hibiyasleep](https://github.com/hibiyasleep) [#120](https://github.com/TheRealSyler/vscode-sass-indented/pull/120)          |
 | 1.8.25   | 26.02.2023  | add readme note: this extension is only for `.sass` files                                                                                     |
 | 1.8.23   | 12.02.2023  | update sass-formatter                                                                                                                         |
 | 1.8.22   | 03.07.2022  | fix [sass-formatter #64](https://github.com/TheRealSyler/sass-formatter/issues/64)                                                            |
