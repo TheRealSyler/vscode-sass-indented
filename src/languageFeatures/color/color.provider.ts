@@ -29,9 +29,14 @@ export class SassColorProvider implements DocumentColorProvider {
       const line = document.lineAt(i);
       if (hasColor(line.text)) {
         const colorsPositions = SassColorProvider._GET_COLOR_POS(line.text);
+
         for (let j = 0; j < colorsPositions.length; j++) {
           const color = colorsPositions[j];
-          const { r, g, b, a } = StringToRGB(color.text);
+          const parsedColor = StringToRGB(color.text);
+          if (!parsedColor) {
+            continue;
+          }
+          const { r, g, b, a } = parsedColor;
           colors.push(
             new ColorInformation(
               new Range(
