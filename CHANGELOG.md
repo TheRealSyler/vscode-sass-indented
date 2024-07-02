@@ -2,6 +2,7 @@
 
 | Version | Date       | Changelog                                                                                                                                       |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.8.30   | 02.07.2024  | fix color provider                                                                                                                            |
 | 1.8.29   | 27.01.2024  | update sass-formatter                                                                                                                         |
 | 1.8.28   | 09.09.2023  | update sass-formatter                                                                                                                         |
 | 1.8.27   | 03.08.2023  | Formatter add support for Web components, by   [@binaryben](https://github.com/binaryben) [sass-formatter#72](https://github.com/TheRealSyler/sass-formatter/pull/72)          |
