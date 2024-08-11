@@ -10,7 +10,7 @@ export class Searcher {
 
   /** searches for variables and mixin. */
   searchDocument(document: TextDocument) {
-    if (document.languageId === 'sass') {
+    if (document.languageId === 'sass' && workspace.workspaceFolders) {
       const text = document.getText();
 
       let workspacePath = '';
