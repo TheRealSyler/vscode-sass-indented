@@ -2,8 +2,8 @@
   "fileTypes": [
     "sass"
   ],
-  "foldingStartMarker": "/\\*|^#|^\\*|^\\b|*#?region|^\\.",
-  "foldingStopMarker": "\\*/|*#?endregion|^\\s*$",
+  "foldingStartMarker": "/\\*|^#|^\\*|^\\b|\\*#?region|^\\.",
+  "foldingStopMarker": "\\*/|\\*#?endregion|^\\s*$",
   "name": "Sass",
   "patterns": [
     {
