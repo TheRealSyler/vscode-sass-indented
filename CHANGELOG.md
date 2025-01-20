@@ -2,6 +2,7 @@
 
 | Version | Date       | Changelog                                                                                                                                                                                                                                 |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.8.32  | 20.01.2025 | Fix TM grammar, by [@slevithan](https://github.com/slevithan)                                                                                                                                                                             |
 | 1.8.31  | 11.08.2024 | Fix no suggestions bug when a directory is not open, by [@akenejie](https://github.com/akenejie)                                                                                                                                          |
 | 1.8.30  | 02.07.2024 | fix color provider                                                                                                                                                                                                                        |
 | 1.8.29  | 27.01.2024 | update sass-formatter                                                                                                                                                                                                                     |
