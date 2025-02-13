@@ -91,6 +91,11 @@
             "nth-child"
           ],
           "description": "items in this array will be at the top of the completion list (only for items that show after the & sign)"
+        },
+        "sass.importRoot": {
+          "type": "string",
+          "default": "",
+          "description": "Root path used to look for Sass import files, used when comiling Sass with --load-path"
         }
       }
     },
