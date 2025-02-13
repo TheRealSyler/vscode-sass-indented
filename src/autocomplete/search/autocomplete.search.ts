@@ -1,6 +1,7 @@
 import { State, StateItem, StateElement } from '../../extension';
 import { CompletionItemKind, ExtensionContext, TextDocument, workspace } from 'vscode';
 import { normalize, relative } from 'path';
+import { AutocompleteUtils } from '../autocomplete.utility';
 
 export class Searcher {
   context: ExtensionContext;
@@ -13,14 +14,7 @@ export class Searcher {
     if (document.languageId === 'sass' && workspace.workspaceFolders) {
       const text = document.getText();
 
-      let workspacePath = '';
-      for (let i = 0; i < workspace.workspaceFolders.length; i++) {
-        const path = workspace.workspaceFolders[i].uri.fsPath;
-        if (document.fileName.startsWith(path)) {
-          workspacePath = path;
-          break;
-        }
-      }
+      let workspacePath = AutocompleteUtils.getDocumentWorkspacePath(document);
 
       const pathBasename = relative(workspacePath, document.fileName);
 

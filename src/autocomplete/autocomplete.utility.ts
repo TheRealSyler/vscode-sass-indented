@@ -10,7 +10,7 @@ import {
 } from 'vscode';
 import sassSchemaUnits from './schemas/autocomplete.units';
 import { readdirSync, statSync, readFileSync } from 'fs';
-import { join, normalize, basename } from 'path';
+import { join, normalize, basename, sep } from 'path';
 import { EntityStatus, IPropertyData, IPseudoClassData, IPseudoElementData, IReference, IValueData, NonPropertyEntity, RawCssEntity } from './autocomplete.interfaces';
 import { isClassOrId, isAtRule } from 'suf-regex';
 import { StateElement, State } from '../extension';
@@ -130,7 +130,7 @@ export class AutocompleteUtils {
     const functionRegex = /(?<funcName>.*)\((?<argName>.*)\)$/;
     const matchedGroups = functionRegex.exec(name)?.groups;
     if (matchedGroups) {
-      const {funcName, argName} = matchedGroups;
+      const { funcName, argName } = matchedGroups;
       snipString = `${funcName}($\{1:${argName}\})`;
     } else {
       snipString = name;
@@ -346,18 +346,50 @@ export class AutocompleteUtils {
     return units;
   }
 
+  static getDocumentWorkspacePath(
+    document: TextDocument
+  ) {
+    for (let i = 0; i < workspace.workspaceFolders.length; i++) {
+      const path = workspace.workspaceFolders[i].uri.fsPath;
+      if (document.fileName.startsWith(path)) {
+        return path;
+      }
+    }
+    return ''
+  }
+
+  static getWorkspaceImportPath(
+    document: TextDocument,
+    importPath: string
+  ) {
+    const importRoot: string | undefined = workspace.getConfiguration().get('sass.importRoot');
+    if (importRoot) {
+      const workspacePath = this.getDocumentWorkspacePath(document);
+      return normalize(
+        join(
+          workspacePath,
+          importRoot,
+          importPath
+        )
+      );
+    }
+    else {
+      return normalize(
+        join(
+          document.fileName,
+          '../',
+          importPath
+        )
+      );
+    }
+  }
+
   static getImportSuggestionsForCurrentWord(
     document: TextDocument,
     currentWord: string
   ): CompletionItem[] {
     const suggestions: CompletionItem[] = [];
-    const path = normalize(
-      join(
-        document.fileName,
-        '../',
-        currentWord.replace(importPathRegex, '$2').trim()
-      )
-    );
+    const path = this.getWorkspaceImportPath(document, currentWord.replace(importPathRegex, '$2').trim());
 
     const dir = readdirSync(path);
     for (const file of dir) {
@@ -529,11 +561,17 @@ export class AutocompleteUtils {
   ) {
     let breakLoop = false;
     for (const item of imports) {
-      let importPath = item.path;
+      let importPath = this.getWorkspaceImportPath(document, item.path);
 
-      const STATE: State = context.workspaceState.get(
-        normalize(join(document.fileName, '../', importPath))
-      );
+      let STATE: State = context.workspaceState.get(importPath);
+      if (STATE == undefined) {
+        // Failed to find import, attempt again with _ before filename
+        const index = importPath.lastIndexOf(sep);
+        if (index != -1) {
+          importPath = importPath.substring(0, index + 1) + '_' + importPath.substring(index + 1);
+          STATE = context.workspaceState.get(importPath);
+        }
+      }
 
       if (STATE) {
         for (const key in STATE) {
