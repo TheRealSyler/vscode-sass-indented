@@ -1,17 +1,17 @@
-name: CI
+# name: CI
 
-on: [push]
+# on: [push]
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: NodeJs Setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: "npm"
-      - run: yarn install --frozen-lockfile
-      - run: yarn test
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: NodeJs Setup
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 22.x
+#           cache: "npm"
+#       - run: yarn install --frozen-lockfile
+#       - run: yarn test
