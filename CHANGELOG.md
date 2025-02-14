@@ -2,6 +2,7 @@
 
 | Version | Date       | Changelog                                                                                                                                                                                                                                 |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.8.33  | 13.02.2025 | Add import root path option ([pull request link](https://github.com/TheRealSyler/vscode-sass-indented/pull/130)), by [@zero-enthusiasm](https://github.com/zero-enthusiasm)                                                               |
 | 1.8.32  | 20.01.2025 | Fix TM grammar, by [@slevithan](https://github.com/slevithan)                                                                                                                                                                             |
 | 1.8.31  | 11.08.2024 | Fix no suggestions bug when a directory is not open, by [@akenejie](https://github.com/akenejie)                                                                                                                                          |
 | 1.8.30  | 02.07.2024 | fix color provider                                                                                                                                                                                                                        |

@@ -4,7 +4,7 @@
     "target": "ES2018",
     "outDir": "out",
     "sourceMap": true,
-    "rootDir": "src",
+    "skipLibCheck": true,
     /* Strict Type-Checking Option */
     "strict": false /* enable all strict type-checking options */,
     /* Additional Checks */
@@ -16,7 +16,6 @@
     // "noUnusedParameters": true,  /* Report errors on unused parameters. */
   },
   "exclude": [
-    "node_modules",
     "src/test/**"
   ]
 }
