@@ -8,6 +8,7 @@
   "scripts": {
     "pre:distribute": "yarn test && yarn build",
     "distribute": "ts-node ./src/scripts/distribute.ts",
+    "pack": "yarn build && vsce pack --no-yarn",
     "build": "tsc -b && suf b && webpack --mode production",
     "watch": "webpack --mode development",
     "test": "ts-node src/test/test.ts",
