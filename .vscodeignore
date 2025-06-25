@@ -16,6 +16,7 @@ tslint.json
 .circleci/**
 BADGES.json
 todo
+.env
 
 package-json.lock
 
